@@ -1,0 +1,3 @@
+py manage.py load_books books/books.csv
+
+py manage.py load_books books/jamalon_dataset.csv
