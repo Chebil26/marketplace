@@ -10,9 +10,14 @@ export const getBookRecommendations = (productName) => async (dispatch) => {
   try {
     dispatch({ type: BOOK_RECOMMENDATIONS_REQUEST });
 
-    const { data } = await axios.get(`/api/recommendation/book_recommendation/${productName}`);
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/api/recommendation/book_recommendation/${productName}`
+    );
 
-    dispatch({ type: BOOK_RECOMMENDATIONS_SUCCESS, payload: data.recommendations });
+    dispatch({
+      type: BOOK_RECOMMENDATIONS_SUCCESS,
+      payload: data.recommendations,
+    });
   } catch (error) {
     dispatch({
       type: BOOK_RECOMMENDATIONS_FAIL,
@@ -23,8 +28,6 @@ export const getBookRecommendations = (productName) => async (dispatch) => {
     });
   }
 };
-
-
 
 export const clearBookRecommendations = () => {
   return {

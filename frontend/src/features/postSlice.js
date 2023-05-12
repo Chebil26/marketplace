@@ -23,7 +23,11 @@ export const createPost = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.post(`/api/blogs/create/`, {}, config);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_SERVER}/api/blogs/create/`,
+        {},
+        config
+      );
 
       return data;
     } catch (error) {
@@ -36,8 +40,6 @@ export const createPost = createAsyncThunk(
     }
   }
 );
-
-
 
 const postSlice = createSlice({
   name: 'post',
@@ -67,7 +69,7 @@ const postSlice = createSlice({
     createPostFail(state, action) {
       state.loading = false;
       state.error = action.payload;
-    }
+    },
   },
 
   extraReducers: (builder) => {
@@ -99,16 +101,17 @@ const postSlice = createSlice({
 //   }
 // };
 
-
 export const getPosts = () => async (dispatch) => {
-    dispatch(postListRequest());
-  
-    try {
-      const response = await axios.get('/api/blogs/posts/');
-      dispatch(postListSuccess(response.data));
-    } catch (error) {
-      dispatch(postListFail(error.message));
-    }
+  dispatch(postListRequest());
+
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/api/blogs/posts/`
+    );
+    dispatch(postListSuccess(response.data));
+  } catch (error) {
+    dispatch(postListFail(error.message));
+  }
 };
 
 export const {
@@ -118,6 +121,6 @@ export const {
   createPostRequest,
   createPostSuccess,
   createPostFail,
-} = postSlice.actions
+} = postSlice.actions;
 
 export default postSlice.reducer;
