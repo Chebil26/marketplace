@@ -32,6 +32,5 @@ scikit-learn==1.0.2
 scikit-learn-extra==0.3.0
 scipy== 1.7.3
 seaborn==0.12.2
-sklearn==0.0.post4
 sqlparse==0.4.3
 tzdata==2022.7
