@@ -171,13 +171,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'adeem',
+        'NAME': 'adeem_mnsz',
         'USER': 'chebil',
-        'PASSWORD': 'HJCpFgaRT6eJbyTsXbuwij78TJ40YN0m',
-        'HOST': 'dpg-ch7dego2qv26p1cd2670-a.frankfurt-postgres.render.com',
+        'PASSWORD': 'ATaeamw5jcH9qwZOOn98iiCz5wU1Mp0s',
+        'HOST': 'dpg-chfhb9e7avjbbjsduejg-a.frankfurt-postgres.render.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
+
 
 # DATABASES = {
 #     'default': {
