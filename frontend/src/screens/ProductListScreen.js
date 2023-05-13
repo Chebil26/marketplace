@@ -49,13 +49,15 @@ function ProductListScreen({ match }) {
   // const storeProducts = products.filter(product => product.store === store.name);
   const storeProducts = products
     .filter((product) => product.store === store.name)
-    .filter(
-      (product) =>
-        product.name.toLowerCase().includes(skeyword.toLowerCase()) ||
-        product.author.toLowerCase().includes(skeyword.toLowerCase()) ||
-        product.isbn.toLowerCase().includes(skeyword.toLowerCase()) ||
-        product.publisher.toLowerCase().includes(skeyword.toLowerCase())
-    );
+    .filter((product) => {
+      const { name, author, isbn, publisher } = product;
+      return (
+        (name?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
+        (author?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
+        (isbn?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
+        (publisher?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false)
+      );
+    });
 
   /* eslint-disable no-restricted-globals */
   let keyword = location.search;
@@ -95,38 +97,38 @@ function ProductListScreen({ match }) {
 
   return (
     <div>
-      <Row className="align-items-center">
+      <Row className='align-items-center'>
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className="text-right">
-          <Button className="my-3" onClick={createProductHandler}>
-            <i className="fas fa-plus"></i> Create Product
+        <Col className='text-right'>
+          <Button className='my-3' onClick={createProductHandler}>
+            <i className='fas fa-plus'></i> Create Product
           </Button>
         </Col>
         <Form.Control
-          type="text"
-          placeholder="Search products"
+          type='text'
+          placeholder='Search products'
           onChange={(e) => setSkeyword(e.target.value)}
-          size="lg"
+          size='lg'
           disabled={loading}
           isInvalid={!!error}
         />
       </Row>
 
       {lodaingDelete && <Loader />}
-      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
 
       {loadingCreate && <Loader />}
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <div>
-          <Table striped bordered hover responsive className="table-sm">
+          <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
                 <th>ID</th>
@@ -148,25 +150,24 @@ function ProductListScreen({ match }) {
 
                   <td>
                     {product.available ? (
-                      <Badge className="badge bg-success">in stock</Badge>
+                      <Badge className='badge bg-success'>in stock</Badge>
                     ) : (
-                      <Badge className="badge bg-danger">out of stock</Badge>
+                      <Badge className='badge bg-danger'>out of stock</Badge>
                     )}
                   </td>
 
                   <td>
                     <LinkContainer to={`/admin/product/edit/${product._id}/`}>
-                      <Button variant="light" className="btn-sm">
-                        Edit <i className="fas fa-edit"></i>
+                      <Button variant='light' className='btn-sm'>
+                        Edit <i className='fas fa-edit'></i>
                       </Button>
                     </LinkContainer>
 
                     <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => deleteHandler(product._id)}
-                    >
-                      <i className="fas fa-trash"></i>
+                      variant='danger'
+                      className='btn-sm'
+                      onClick={() => deleteHandler(product._id)}>
+                      <i className='fas fa-trash'></i>
                     </Button>
                   </td>
                 </tr>
