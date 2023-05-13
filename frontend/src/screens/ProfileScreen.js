@@ -138,8 +138,7 @@ function ProfileScreen() {
               type='name'
               placeholder='Enter name'
               value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setName(e.target.value)}></Form.Control>
           </Form.Group>
 
           <Form.Group controlId='email'>
@@ -149,8 +148,7 @@ function ProfileScreen() {
               type='email'
               placeholder='Enter Email'
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setEmail(e.target.value)}></Form.Control>
           </Form.Group>
 
           <Form.Group controlId='password'>
@@ -159,8 +157,7 @@ function ProfileScreen() {
               type='password'
               placeholder='Enter Password'
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
+              onChange={(e) => setPassword(e.target.value)}></Form.Control>
           </Form.Group>
 
           <Form.Group controlId='passwordConfirm'>
@@ -169,8 +166,9 @@ function ProfileScreen() {
               type='password'
               placeholder='Confirm Password'
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            ></Form.Control>
+              onChange={(e) =>
+                setConfirmPassword(e.target.value)
+              }></Form.Control>
           </Form.Group>
 
           <Button type='submit' variant='primary'>
