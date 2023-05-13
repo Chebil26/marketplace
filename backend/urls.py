@@ -24,7 +24,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',TemplateView.as_view(template_name='index.html')),
+    # path('',TemplateView.as_view(template_name='index.html')),
     path('api/products/' , include('base.urls.product_urls')),
     path('api/stores/' , include('base.urls.store_urls')),
     path('api/users/' , include('base.urls.user_urls')),
