@@ -13,7 +13,7 @@ function Product({ product }) {
         <Card.Img
           src={
             product.image
-              ? `${process.env.REACT_APP_API_SERVER}${product.image}`
+              ? `https://adeem-2se9.onrender.com/images/The_Sound_Of_Waves_5rpr58Y.jpg`
               : product.defaultImage
               ? product.defaultImage
               : placeholder
