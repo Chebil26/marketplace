@@ -135,7 +135,7 @@ function ProductEditScreen() {
       };
 
       const { data } = await axios.post(
-        '/api/products/upload/',
+        `${process.env.REACT_APP_API_SERVER}/api/products/upload/`,
         formData,
         config
       );

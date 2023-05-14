@@ -15,12 +15,18 @@ import {
 function ProfileScreen() {
   let history = useNavigate();
   const [name, setName] = useState('');
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
   const [hasReadingChallenge, setHasReadingChallenge] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   const dispatch = useDispatch();
 
@@ -69,8 +75,9 @@ function ProfileScreen() {
           history(`/`);
         }
       } else {
-        setName(user.name);
-        setEmail(user.email);
+        setName(userInfo.name);
+        setUserName(userInfo.username);
+        setEmail(userInfo.email);
       }
     }
   }, [dispatch, history, userInfo, user, success, successCreate]);
@@ -116,65 +123,87 @@ function ProfileScreen() {
         {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
         <h2>User Data</h2>
-        <Card md={3} className='my-3 p-3 rounded' style={{ width: '30rem' }}>
-          <Card.Title as='h4'>
-            <strong>{name}</strong>
-          </Card.Title>
-          <Card.Title as='h4'>
-            <strong>{email}</strong>
-          </Card.Title>
+        <Card
+          md={3}
+          className='my-3 p-3 rounded'
+          style={{ width: '30rem', backgroundColor: '' }}>
+          <Card.Body>
+            <Card.Title style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+              <strong>{name}</strong>
+            </Card.Title>
+            <Card.Text style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>
+              <strong>Email:</strong> {email}
+            </Card.Text>
+            <Button
+              variant='primary'
+              onClick={toggleEditMode}
+              style={{ fontSize: '1.2rem' }}>
+              {editMode ? 'Cancel' : 'Edit'}
+            </Button>
+          </Card.Body>
         </Card>
       </Col>
+
       <Col>
-        <h2>Update</h2>
-        {message && <Message variant='danger'>{message}</Message>}
-        {error && <Message variant='danger'>{error}</Message>}
-        {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId='name'>
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              required
-              type='name'
-              placeholder='Enter name'
-              value={name}
-              onChange={(e) => setName(e.target.value)}></Form.Control>
-          </Form.Group>
+        {/* <Button
+          onClick={toggleEditMode}
+          size='lg'
+          className='mt-3 mb-3 px-4 py-2'>
+          {editMode ? 'Cancel' : 'Edit Profile'}
+        </Button> */}
+        {editMode && (
+          <div>
+            <h2>Update</h2>
+            {message && <Message variant='danger'>{message}</Message>}
+            {error && <Message variant='danger'>{error}</Message>}
+            {loading && <Loader />}
+            <Form onSubmit={submitHandler}>
+              <Form.Group controlId='name'>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  required
+                  type='name'
+                  placeholder='Enter name'
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}></Form.Control>
+              </Form.Group>
 
-          <Form.Group controlId='email'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              required
-              type='email'
-              placeholder='Enter Email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}></Form.Control>
-          </Form.Group>
+              <Form.Group controlId='email'>
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  required
+                  type='email'
+                  placeholder='Enter Email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}></Form.Control>
+              </Form.Group>
 
-          <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Enter Password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}></Form.Control>
-          </Form.Group>
+              <Form.Group controlId='password'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  placeholder='Enter Password'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}></Form.Control>
+              </Form.Group>
 
-          <Form.Group controlId='passwordConfirm'>
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Confirm Password'
-              value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }></Form.Control>
-          </Form.Group>
+              <Form.Group controlId='passwordConfirm'>
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  placeholder='Confirm Password'
+                  value={confirmPassword}
+                  onChange={(e) =>
+                    setConfirmPassword(e.target.value)
+                  }></Form.Control>
+              </Form.Group>
 
-          <Button type='submit' variant='primary'>
-            Update
-          </Button>
-        </Form>
+              <Button type='submit' variant='primary'>
+                Update
+              </Button>
+            </Form>
+          </div>
+        )}
       </Col>
     </Row>
   );
