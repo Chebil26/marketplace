@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Row, Col, Button, Dropdown } from 'react-bootstrap';
-import Product from '../components/Product';
+import { Button, Col, Dropdown } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
+import { listStores } from '../actions/storeActions';
+import FeaturedStores from '../components/FeaturedStores';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import ProductCarousel from '../components/ProductCarousel';
-import StoreCarousel from '../components/StoreCarousel';
-import SelectProduct from '../components/SelectProduct';
 import Paginate from '../components/Paginate';
-import FeaturedStores from '../components/FeaturedStores';
-import { listStores } from '../actions/storeActions';
+import Product from '../components/Product';
 
 function HomeScreen() {
-  let history = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
@@ -58,6 +53,14 @@ function HomeScreen() {
 
   return (
     <div>
+      {!keyword &&
+        (storesLoading ? (
+          <Loader />
+        ) : storesError ? (
+          <Message variant='danger'>{storesError}</Message>
+        ) : (
+          <FeaturedStores stores={stores} />
+        ))}
       <div
         style={{
           display: 'flex',
@@ -97,14 +100,7 @@ function HomeScreen() {
       </div>
       {/* {!keyword && <StoreCarousel />}
       {!keyword && <ProductCarousel />} */}
-      {!keyword &&
-        (storesLoading ? (
-          <Loader />
-        ) : storesError ? (
-          <Message variant='danger'>{storesError}</Message>
-        ) : (
-          <FeaturedStores stores={stores} />
-        ))}
+
       <div
         style={{
           display: 'flex',

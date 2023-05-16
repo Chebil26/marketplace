@@ -42,13 +42,13 @@ class Product(models.Model):
     isbn = models.CharField(max_length=1000, null=True, blank=True)
     published_year = models.CharField(max_length=1000, null=True, blank=True)
     num_pages = models.IntegerField(null=True, blank=True, default=200)
-
-    language = models.CharField( max_length=2 , choices=LANGUAGE, default='EN' , null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)   
+    image = models.ImageField(null= True , blank=True)
+    language = models.CharField( max_length=2 , choices=LANGUAGE, default='EN' , null=True, blank=True)  
     defaultImage = models.CharField(max_length=1000, null=True, blank=True  )                 
     publisher = models.CharField(max_length=1000, null=True, blank=True)
     category = models.CharField(max_length=1000, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
+    
     rating = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True, default=0)  
     numReviews = models.IntegerField(null=True, blank=True, default=0)
