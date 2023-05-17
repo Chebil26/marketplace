@@ -8,14 +8,23 @@ import Post from '../components/Post';
 
 const PostCreateScreen = () => {
   const [showComponent, setShowComponent] = useState(false);
-  const [created, setCreated] = useState(false);
-  const storeByUser = useSelector((state) => state.storeByUser);
-  const { loading: loadingStore, error: errorStore, store } = storeByUser;
+
+  const dispatch = useDispatch();
+
+  const storeDetails = useSelector((state) => state.storeDetails);
+  const { loading: loadingStore, error: errorStore, store } = storeDetails;
 
   const posts = useSelector((state) => state.post.posts);
   const loading = useSelector((state) => state.post.loading);
   const error = useSelector((state) => state.post.error);
-  const dispatch = useDispatch();
+
+  const storePosts = posts.filter((post) => post.store === store.name);
+
+  console.log(storePosts);
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
 
   // const postDetails = useSelector(state => state.postDetails)
   // const { loading:loadingpost, error:errorpost, post } = postDetails
@@ -32,15 +41,42 @@ const PostCreateScreen = () => {
   };
   return (
     <div>
-      <Button onClick={handleButtonClick}>Create a Post </Button>
-      {showComponent && <Button onClick={handleCancelClick}>Cancel</Button>}
+      <div
+        style={{
+          marginTop: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
+        <Button
+          onClick={handleButtonClick}
+          variant='success'
+          size='lg'
+          style={{ width: '200px' }}>
+          Create a Post
+        </Button>
+        {showComponent && (
+          <Button
+            onClick={handleCancelClick}
+            variant='warning'
+            size='lg'
+            style={{ width: '200px', marginLeft: '1rem' }}>
+            Cancel
+          </Button>
+        )}
+      </div>
 
       {showComponent && <CreatePostForm />}
-      <div>
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </div>
+      {loading ? (
+        <h3>Loading...</h3>
+      ) : error ? (
+        <h3>{error}</h3>
+      ) : (
+        <div>
+          {storePosts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

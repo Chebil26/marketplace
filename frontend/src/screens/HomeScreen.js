@@ -72,14 +72,21 @@ function HomeScreen() {
         </Row>
       )}
 
-      <Row
+      {/* <Row
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '1rem',
         }}>
-        <Col>
+        <Col></Col>
+      </Row> */}
+
+      {/* {!keyword && <StoreCarousel />}
+      {!keyword && <ProductCarousel />} */}
+
+      <Row>
+        <Col md={9}>
           <h2
             style={{
               color: '#18bc9c',
@@ -118,14 +125,7 @@ function HomeScreen() {
               Clear <i className='fa-solid fa-rotate-left'></i>
             </Button>
           </div>
-        </Col>
-      </Row>
 
-      {/* {!keyword && <StoreCarousel />}
-      {!keyword && <ProductCarousel />} */}
-
-      <Row>
-        <Col md={9}>
           {loading ? (
             <Loader />
           ) : error ? (

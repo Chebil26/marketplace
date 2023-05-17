@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col, Badge, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import {
+  createProduct,
+  deleteProduct,
+  listProducts,
+} from '../actions/productActions';
+import { listStoreByUser } from '../actions/storeActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import Paginate from '../components/Paginate';
-import {
-  listProducts,
-  deleteProduct,
-  createProduct,
-} from '../actions/productActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
-import { listStoreDetails } from '../actions/storeActions';
-import { listStoreByUser } from '../actions/storeActions';
-import { createPost } from '../features/postSlice';
 
 function ProductListScreen({ match }) {
   let history = useNavigate();
@@ -110,7 +107,7 @@ function ProductListScreen({ match }) {
           type='text'
           placeholder='Search products'
           onChange={(e) => setSkeyword(e.target.value)}
-          size='lg'
+          // size='lg'
           disabled={loading}
           isInvalid={!!error}
         />
