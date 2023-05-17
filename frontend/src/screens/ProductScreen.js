@@ -59,7 +59,6 @@ function ProductScreen({ match }) {
     recommendations,
   } = bookRecommendations;
 
-  console.log('before', recommendations);
   useEffect(() => {
     if (successProductReview) {
       setRating(0);
@@ -71,8 +70,6 @@ function ProductScreen({ match }) {
   }, [dispatch, match, successProductReview, product.name]);
 
   // Clear the recommendations state after using it
-
-  console.log('after', recommendations);
 
   const submitHandler = (e) => {
     e.preventDefault();
