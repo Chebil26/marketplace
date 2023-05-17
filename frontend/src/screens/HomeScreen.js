@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-import { Button, Col, Dropdown } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
 import FeaturedStores from '../components/FeaturedStores';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
+import Post from '../components/Post';
 import Product from '../components/Product';
+import { getPosts } from '../features/postSlice';
 
 function HomeScreen() {
   const location = useLocation();
@@ -19,6 +21,10 @@ function HomeScreen() {
 
   const storeList = useSelector((state) => state.storeList);
   const { loading: storesLoading, error: storesError, stores } = storeList;
+
+  const posts = useSelector((state) => state.post.posts);
+  const postsLoading = useSelector((state) => state.post.loading);
+  const postsError = useSelector((state) => state.post.error);
 
   const [filter, setFilter] = useState('');
   let keyword = location.search;
@@ -32,6 +38,7 @@ function HomeScreen() {
     } else {
       dispatch(listProducts());
       dispatch(listStores());
+      dispatch(getPosts());
     }
   }, [dispatch, keyword, filter]);
 
@@ -53,73 +60,152 @@ function HomeScreen() {
 
   return (
     <div>
-      {!keyword &&
-        (storesLoading ? (
-          <Loader />
-        ) : storesError ? (
-          <Message variant='danger'>{storesError}</Message>
-        ) : (
-          <FeaturedStores stores={stores} />
-        ))}
-      <div
+      {!keyword && (
+        <Row>
+          {storesLoading ? (
+            <Loader />
+          ) : storesError ? (
+            <Message variant='danger'>{storesError}</Message>
+          ) : (
+            <FeaturedStores stores={stores} />
+          )}
+        </Row>
+      )}
+
+      <Row
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          marginBottom: '1rem',
         }}>
-        <h1>Latest Books</h1>
-        <Dropdown drop='end' alignRight>
-          <Dropdown.Toggle variant='outline-info' id='dropdown-button'>
-            Filter
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={fictionFilterHandler}>
-              <Button className='mx-1' variant='info' block>
-                Fiction
-              </Button>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={historyFilterHandler}>
-              <Button className='mx-1' variant='info' block>
-                History
-              </Button>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={novelFilterHandler}>
-              <Button className='mx-1' variant='info' block>
-                Novels
-              </Button>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-          <Button
-            className='mx-1'
-            variant='outline-warning'
-            block
-            onClick={clearHandler}>
-            Clear <i className='fa-solid fa-rotate-left'></i>
-          </Button>
-        </Dropdown>
-      </div>
+        <Col>
+          <h2
+            style={{
+              color: '#18bc9c',
+              fontWeight: 'bold',
+              marginBottom: '0.5rem',
+            }}>
+            Latest Books
+          </h2>
+          <div style={{ display: 'flex', marginTop: '1rem' }}>
+            <Dropdown drop='end' alignRight>
+              <Dropdown.Toggle variant='outline-info' id='dropdown-button'>
+                Filter
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={fictionFilterHandler}>
+                  <Button className='mx-1' variant='info' block>
+                    Fiction
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item onClick={historyFilterHandler}>
+                  <Button className='mx-1' variant='info' block>
+                    History
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item onClick={novelFilterHandler}>
+                  <Button className='mx-1' variant='info' block>
+                    Novels
+                  </Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Button
+              className='mx-1'
+              variant='outline-warning'
+              onClick={clearHandler}>
+              Clear <i className='fa-solid fa-rotate-left'></i>
+            </Button>
+          </div>
+        </Col>
+      </Row>
+
       {/* {!keyword && <StoreCarousel />}
       {!keyword && <ProductCarousel />} */}
 
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-        }}>
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='danger'>{error}</Message>
-        ) : (
-          products.map((product) => (
-            <Col key={product._id} md={6} lg={4} xl={3}>
-              <Product product={product} />
-            </Col>
-          ))
-        )}
-      </div>
+      <Row>
+        <Col md={9}>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant='danger'>{error}</Message>
+          ) : (
+            <Row>
+              {products.map((product) => (
+                <Col key={product._id} md={5} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))}
+            </Row>
+          )}
+        </Col>
+
+        <Col md={3}>
+          <Container
+            className='my-5'
+            style={{
+              height: '1500px',
+              padding: '10px',
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#888888 #f2f2f2',
+            }}>
+            <style>
+              {`
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #888888;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #555555;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: #f2f2f2;
+      }
+    `}
+            </style>
+
+            <h3
+              style={{
+                color: '#18bc9c',
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+              }}>
+              Posts
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {posts.slice(0, 4).map((post) => (
+                <div key={post._id} className='mb-3'>
+                  <Post post={post} />
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: 'auto',
+              }}>
+              <Link to='/posts'>
+                <Button variant='primary' className='mt-auto'>
+                  Continue Reading
+                </Button>
+              </Link>
+            </div>
+          </Container>
+        </Col>
+      </Row>
+
       <Paginate page={page} pages={pages} keyword={keyword} />
+
+      {/* Add the posts component here */}
     </div>
   );
 }
