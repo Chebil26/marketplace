@@ -6,6 +6,7 @@ import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
 import FeaturedStores from '../components/FeaturedStores';
+import ProductCarousel from '../components/ProductCarousel';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
@@ -60,6 +61,7 @@ function HomeScreen() {
 
   return (
     <div>
+      {!keyword && <ProductCarousel />}
       {!keyword && (
         <Row>
           {storesLoading ? (
