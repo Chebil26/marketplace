@@ -8,27 +8,52 @@ class Command(BaseCommand):
     help = 'Load data from a CSV file into the database'
 
     def add_arguments(self, parser):
-        parser.add_argument('books.csv', help='books/books.csv')
+        parser.add_argument('books_goodreads.csv', help='books_goodreads.csv')
     # def add_arguments(self, parser):
     #     parser.add_argument('jamalon_dataset.csv', help='books/jamalon_dataset.csv')
 
     def handle(self, *args, **options):
-        filename = options['books.csv']
+        filename = options['books_goodreads.csv']
         # filename = options['jamalon_dataset.csv']
         with open(filename, 'r') as f:
             reader = csv.reader(f)
             next(reader)  # skip header row
             for row in reader:
                 product = Product(
-                    isbn=row[0],
+
+                
+                    isbn=row[8],
                     name=row[1],
-                    author=row[2],
-                    published_year=row[3],
-                    defaultImage=row[7],
-                    price=int(random.randint(3, 16)) * 100,
-                    category=random.choice(['Fiction', 'Non-fiction', 'Mystery', 'Thriller', 'Romance', 'Science fiction', 'Fantasy', 'Biography', 'Autobiography', 'History']),
-                    description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed interdum eleifend justo, vel iaculis urna mollis ac. Donec id purus nunc. Maecenas suscipit pharetra augue a ullamcorper.',
+                    author=row[3],
+                    defaultImage=row[21],
+                    price=int(random.randint(3, 16) * 100),
+                    category=row[8],
+                    description=row[5],
+                    published_year=row[15],
+                    publisher=row[13],
                 )
+
+                    #main_dataset
+
+                #     isbn=row[8],
+                #     name=row[1],
+                #     author=row[2],
+                #     defaultImage=row[0],
+                #     price=int(random.randint(3, 16) * 100),
+                #     category=row[9],
+                #     description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed interdum eleifend justo, vel iaculis urna mollis ac. Donec id purus nunc. Maecenas suscipit pharetra augue a ullamcorper.',
+                # )
+
+                #amazo,
+                #     isbn=row[0],
+                #     name=row[1],
+                #     author=row[2],
+                #     published_year=row[3],
+                #     defaultImage=row[7],
+                #     price=int(random.randint(3, 16)) * 100,
+                #     category=random.choice(['Fiction', 'Non-fiction', 'Mystery', 'Thriller', 'Romance', 'Science fiction', 'Fantasy', 'Biography', 'Autobiography', 'History']),
+                #     description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed interdum eleifend justo, vel iaculis urna mollis ac. Donec id purus nunc. Maecenas suscipit pharetra augue a ullamcorper.',
+                # )
 
                     #7k
                     # isbn=row[0],

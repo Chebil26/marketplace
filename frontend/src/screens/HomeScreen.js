@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
-import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Row, Image } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
 import FeaturedStores from '../components/FeaturedStores';
@@ -61,6 +61,17 @@ function HomeScreen() {
 
   return (
     <div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Image
+              src='https://i.postimg.cc/mrNF47fr/906-generated.jpg'
+              alt='Banner'
+              fluid
+            />
+          </Col>
+        </Row>
+      </Container>
       {!keyword && <ProductCarousel />}
       {!keyword && (
         <Row>
@@ -135,7 +146,13 @@ function HomeScreen() {
           ) : (
             <Row>
               {products.map((product) => (
-                <Col key={product._id} md={5} lg={4} xl={3}>
+                <Col
+                  key={product._id}
+                  // md={5}
+                  // lg={4}
+                  // xl={3}
+                  // style={{ width: '200px', height: '300px' }}
+                >
                   <Product product={product} />
                 </Col>
               ))}
