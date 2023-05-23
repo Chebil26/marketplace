@@ -33,10 +33,7 @@ function App() {
     <Router>
       <Header />
       <Row>
-        <Col sm={1}>
-          <SideBar />
-        </Col>
-        <Col sm={10}>
+        <Col>
           <main>
             <Container>
               <Routes>

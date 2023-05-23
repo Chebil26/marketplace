@@ -10,7 +10,15 @@ import { logout } from '../actions/userActions';
 import { createProduct } from '../actions/productActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
-function Header() {
+function Header({ filterHandler, clearHandler }) {
+  const categories = [
+    'Fiction',
+    'Mystery',
+    'Science Fiction',
+    'Fantasy',
+    'Romance',
+  ];
+
   const history = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -90,7 +98,11 @@ function Header() {
               </LinkContainer>
             </Nav>
 
-            <Nav className='justify-content-end flex-grow-1 pe-3'>
+            <Nav className='mx-auto'>
+              <SearchBox />
+            </Nav>
+
+            <Nav className='justify-content-end'>
               {userInfo && userInfo.isAdmin && (
                 <Nav>
                   <LinkContainer to='/admin/productlist'>
@@ -112,12 +124,46 @@ function Header() {
                   </Button>
                 </Nav>
               )}
-
-              <SearchBox />
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {/* Add subheader */}
+      {/* <Navbar
+        bg='light'
+        variant='light'
+        style={{ height: '50px' }}
+        collapseOnSelect>
+        <Container>
+          <Nav
+            className='d-flex align-items-center justify-content-center'
+            style={{ width: '100%' }}>
+            {categories.map((category, index) => (
+              <React.Fragment key={category}>
+                {index !== 0 && (
+                  <span
+                    style={{
+                      margin: '0 5px',
+                      borderLeft: '1px solid black',
+                      height: '14px',
+                      display: 'inline-block',
+                    }}></span>
+                )}
+                <Nav.Link
+                  style={{
+                    marginRight: '10px',
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => filterHandler(category)}>
+                  {category}
+                </Nav.Link>
+              </React.Fragment>
+            ))}
+          </Nav>
+        </Container>
+      </Navbar> */}
     </header>
   );
 }

@@ -14,23 +14,37 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         filename = options['books_goodreads.csv']
+
+        
+        # Join the categories into a single string separated by commas
         # filename = options['jamalon_dataset.csv']
         with open(filename, 'r') as f:
             reader = csv.reader(f)
             next(reader)  # skip header row
             for row in reader:
+                categories_string = row[8]
+                start_index = categories_string.index('[')
+                end_index = categories_string.index(']')
+                categories = categories_string[start_index+1:end_index]
+                categories_list = [category.strip().strip("'") for category in categories.split(',')]
+                
+                categories_combined = ', '.join(categories_list)
+
                 product = Product(
 
                 
-                    isbn=row[8],
+                    isbn=row[7],
                     name=row[1],
                     author=row[3],
                     defaultImage=row[21],
                     price=int(random.randint(3, 16) * 100),
-                    category=row[8],
+                    
                     description=row[5],
                     published_year=row[15],
                     publisher=row[13],
+
+                    category=categories_combined,
+
                 )
 
                     #main_dataset

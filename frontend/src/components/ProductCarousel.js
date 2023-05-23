@@ -7,6 +7,7 @@ import Message from './Message';
 import { listTopProducts } from '../actions/productActions';
 
 function ProductCarousel() {
+  const placeholder = `${process.env.REACT_APP_API_SERVER}/images/book_placeholder.png`;
   const dispatch = useDispatch();
 
   const productTopRated = useSelector((state) => state.productTopRated);
@@ -33,7 +34,13 @@ function ProductCarousel() {
               <div key={product._id} className='text-center product-item'>
                 <Link to={`/product/${product._id}`}>
                   <Image
-                    src={`${process.env.REACT_APP_API_SERVER}${product.image}`}
+                    src={
+                      product.image
+                        ? `${process.env.REACT_APP_API_SERVER}${product.image}`
+                        : product.defaultImage
+                        ? product.defaultImage
+                        : placeholder
+                    }
                     alt={product.name}
                     fluid
                     className='product-image'
