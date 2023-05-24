@@ -30,20 +30,16 @@ class Command(BaseCommand):
                 
                 categories_combined = ', '.join(categories_list)
 
-                product = Product(
+                book = Book(
 
                 
                     isbn=row[7],
-                    name=row[1],
+                    title=row[1],
                     author=row[3],
-                    defaultImage=row[21],
-                    price=int(random.randint(3, 16) * 100),
-                    
+                    cover=row[21],                    
                     description=row[5],
                     published_year=row[15],
-                    publisher=row[13],
-
-                    category=categories_combined,
+                    categories=categories_combined,
 
                 )
 
@@ -93,5 +89,5 @@ class Command(BaseCommand):
                 
 
 
-                product.save()
+                book.save()
         self.stdout.write(self.style.SUCCESS('Data loaded successfully.'))

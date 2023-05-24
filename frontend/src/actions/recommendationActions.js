@@ -11,7 +11,7 @@ export const getBookRecommendations = (productName) => async (dispatch) => {
     dispatch({ type: BOOK_RECOMMENDATIONS_REQUEST });
 
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/api/recommendation/book_recommendation/${productName}`
+      `https://book-recommendation-015s.onrender.com/book_recommendation/${productName}`
     );
 
     dispatch({
@@ -34,3 +34,5 @@ export const clearBookRecommendations = () => {
     type: CLEAR_BOOK_RECOMMENDATIONS,
   };
 };
+
+// `${process.env.REACT_APP_API_SERVER}/api/recommendation/book_recommendation/${productName}`

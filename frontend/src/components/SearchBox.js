@@ -23,7 +23,7 @@ function SearchBox() {
           onChange={(e) => setKeyword(e.target.value)}
           placeholder='Explore'
           aria-label='Search'
-          style={{ width: '500px' }} // Adjust the width as needed
+          style={{ width: '400px' }} // Adjust the width as needed
         />
       </Form.Group>
 

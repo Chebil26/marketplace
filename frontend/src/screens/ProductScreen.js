@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import {
-  Row,
-  Col,
-  Image,
-  Form,
-  ListGroup,
+  Badge,
   Button,
   Card,
-  ListGroupItem,
-  Badge,
-  FormGroup,
+  Col,
+  Form,
+  Image,
+  ListGroup,
+  Row,
 } from 'react-bootstrap';
-import Rating from '../components/Rating';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import {
+  createProductReview,
+  listProductDetails,
+} from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import {
-  listProductDetails,
-  createProductReview,
-} from '../actions/productActions';
+import Rating from '../components/Rating';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 
-import {
-  getBookRecommendations,
-  clearBookRecommendations,
-} from '../actions/recommendationActions';
+import { getBookRecommendations } from '../actions/recommendationActions';
 
 function ProductScreen({ match }) {
   const [rating, setRating] = useState(0);
@@ -68,7 +61,6 @@ function ProductScreen({ match }) {
     dispatch(listProductDetails(id));
     dispatch(getBookRecommendations(product.name));
   }, [dispatch, match, successProductReview, product.name]);
-
   // Clear the recommendations state after using it
 
   const submitHandler = (e) => {

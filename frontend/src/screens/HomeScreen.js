@@ -32,6 +32,9 @@ function HomeScreen() {
 
   const [filter, setFilter] = useState('');
   let keyword = location.search;
+
+  const queryParams = new URLSearchParams(location.search);
+  let keywordHeader = queryParams.get('keyword');
   // setKey(keyword)
 
   useEffect(() => {
@@ -49,9 +52,13 @@ function HomeScreen() {
   const categories = [
     'Fiction',
     'Mystery',
+    'Non fiction',
     'Science Fiction',
+    'Historical Fiction',
     'Fantasy',
     'Romance',
+    'Biography',
+    'Self Help',
   ];
 
   const filterHandler = (category) => {
@@ -62,22 +69,6 @@ function HomeScreen() {
   const clearHandler = () => {
     setFilter('');
   };
-
-  // const fictionFilterHandler = () => {
-  //   setFilter('?keyword=fiction&page=1');
-  // };
-
-  // const novelFilterHandler = () => {
-  //   setFilter('?keyword=novel&page=1');
-  // };
-
-  // const historyFilterHandler = () => {
-  //   setFilter('?keyword=history&page=1');
-  // };
-
-  // const clearHandler = () => {
-  //   setFilter('');
-  // };
 
   return (
     <>
@@ -106,7 +97,7 @@ function HomeScreen() {
             </Row>
           </Container>
         )}
-        {!keyword && <ProductCarousel />}
+        {/* {!keyword && <ProductCarousel />}
         {!keyword && (
           <Row>
             {storesLoading ? (
@@ -117,7 +108,7 @@ function HomeScreen() {
               <FeaturedStores stores={stores} />
             )}
           </Row>
-        )}
+        )} */}
 
         {/* <Row
         style={{
@@ -140,43 +131,13 @@ function HomeScreen() {
                 fontWeight: 'bold',
                 marginBottom: '0.5rem',
               }}>
-              Books
+              {keyword ? `'${keywordHeader}'` : 'Books'}
             </h2>
             <FilterDropdownMenu
               categories={categories}
               filterHandler={filterHandler}
               clearHandler={clearHandler}
             />
-            {/* <div style={{ display: 'flex', marginTop: '1rem' }}>
-            <Dropdown drop='end' alignRight>
-              <Dropdown.Toggle variant='outline-info' id='dropdown-button'>
-                Filter
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={fictionFilterHandler}>
-                  <Button className='mx-1' variant='info' block>
-                    Fiction
-                  </Button>
-                </Dropdown.Item>
-                <Dropdown.Item onClick={historyFilterHandler}>
-                  <Button className='mx-1' variant='info' block>
-                    History
-                  </Button>
-                </Dropdown.Item>
-                <Dropdown.Item onClick={novelFilterHandler}>
-                  <Button className='mx-1' variant='info' block>
-                    Novels
-                  </Button>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Button
-              className='mx-1'
-              variant='outline-warning'
-              onClick={clearHandler}>
-              Clear <i className='fa-solid fa-rotate-left'></i>
-            </Button>
-          </div> */}
 
             {loading ? (
               <Loader />
@@ -263,8 +224,6 @@ function HomeScreen() {
         </Row>
 
         <Paginate page={page} pages={pages} keyword={keyword} />
-
-        {/* Add the posts component here */}
       </div>
     </>
   );

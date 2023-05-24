@@ -19,6 +19,8 @@ class Command(BaseCommand):
             for row in reader:
                 book = Book(
 
+                    
+
                     #amazon
                     isbn=row[0],
                     title=row[1],
