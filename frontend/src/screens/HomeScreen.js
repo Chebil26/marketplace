@@ -10,7 +10,12 @@ import {
   Card,
   CardContent,
   CardMedia,
+  TextField, // Import TextField component from Material-UI
+  IconButton, // Import IconButton component from Material-UI
+  // Import SearchIcon component from Material-UI
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
@@ -82,6 +87,12 @@ function HomeScreen() {
     setFilter('');
   };
 
+  const handleSearch = (event) => {
+    const value = event.target.value;
+    setFilter(value);
+    history(`?keyword=${value}&page=1`);
+  };
+
   return (
     <>
       <CategoriesHeader
@@ -113,9 +124,39 @@ function HomeScreen() {
                   component='h2'
                   color='primary'
                   fontWeight='bold'
-                  marginBottom='0.5rem'>
+                  marginBottom='0.5rem'
+                  sx={{
+                    fontFamily: 'Arial', // Replace with your desired font or font stack
+                    fontSize: '1.2rem',
+                    fontWeight: 'bold',
+                    marginBottom: '1rem',
+                    textShadow: '1px 1px 1px rgba(0, 0, 0, 0.3)',
+                    borderBottom: '1px solid #ccc',
+                    paddingBottom: '0.5rem',
+                  }}>
                   {keyword ? `'${keywordHeader}'` : 'Books'}
                 </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                  }}>
+                  <TextField
+                    id='search'
+                    label='Search books'
+                    variant='outlined'
+                    size='small'
+                    value={filter}
+                    sx={{ width: '100%', marginRight: '0.5rem' }}
+                    onChange={handleSearch}
+                  />
+                  <IconButton
+                    onClick={() => history(`?keyword=${filter}&page=1`)}>
+                    <SearchIcon />
+                  </IconButton>
+                </Box>
                 {/* <FilterDropdownMenu
                   categories={categories}
                   filterHandler={filterHandler}
@@ -161,16 +202,16 @@ function HomeScreen() {
                       ::-webkit-scrollbar {
                         width: 8px;
                       }
-        
+
                       ::-webkit-scrollbar-thumb {
                         background-color: #888888;
                         border-radius: 4px;
                       }
-        
+
                       ::-webkit-scrollbar-thumb:hover {
                         background-color: #555555;
                       }
-        
+
                       ::-webkit-scrollbar-track {
                         background-color: #f2f2f2;
                       }

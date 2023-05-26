@@ -18,6 +18,7 @@ import {
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useNavigate } from 'react-router-dom';
@@ -91,14 +92,15 @@ const ProductScreen = ({ match }) => {
 
   return (
     <Container>
-      <Link
+      <Button
+        component={Link}
         to='/'
-        component={Button}
-        variant='outlined'
-        color='primary'
-        sx={{ mb: 3 }}>
+        variant='contained'
+        color='inherit'
+        sx={{ marginBottom: 3, marginTop: '10px' }}>
+        <ArrowBackIcon sx={{ marginRight: '0.5rem' }} />
         Go back
-      </Link>
+      </Button>
       {loading ? (
         <Loader />
       ) : error ? (
