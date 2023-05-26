@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  Avatar,
+  Typography,
+  Grid,
+  Box,
+  Button,
+  TextField,
+} from '@mui/material';
+import { styled } from '@mui/system';
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -13,6 +23,18 @@ import {
   readingChallengeByUser,
 } from '../actions/challengeActions';
 function ProfileScreen() {
+  const StyledBox = styled(Box)(({ theme }) => ({
+    padding: theme.spacing(4),
+    backgroundColor: '#f7f7f7',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    borderRadius: '12px',
+    textAlign: 'center',
+    transition: 'transform 0.2s',
+    '&:hover': {
+      transform: 'scale(1.02)',
+      cursor: 'pointer',
+    },
+  }));
   let history = useNavigate();
   const [name, setName] = useState('');
   const [userName, setUserName] = useState('');
@@ -107,105 +129,94 @@ function ProfileScreen() {
   };
 
   return (
-    <Row>
-      <Col>
-        {!readingChallenge && (
-          <Button className='my-3' onClick={createReadingChallengeHandler}>
-            <i className='fas fa-plus'></i> Set Reading challenge
-          </Button>
+    <Grid container spacing={3} direction='column'>
+      <Grid item>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <StyledBox>
+            <Avatar
+              alt={user.name}
+              src={user.avatar}
+              sx={{ width: 150, height: 150, mb: 3 }}
+            />
+            <Typography variant='h3' component='h1' gutterBottom>
+              {user.name}
+            </Typography>
+            <Typography variant='h5' gutterBottom color='primary'>
+              @{user.username}
+            </Typography>
+            <Typography variant='body1' gutterBottom>
+              {user.bio}
+            </Typography>
+            <Typography variant='body2' color='textSecondary' gutterBottom>
+              Location: {user.location}
+            </Typography>
+            <Typography variant='body2' color='textSecondary'>
+              Email: {user.email}
+            </Typography>
+          </StyledBox>
         )}
+      </Grid>
 
-        {readingChallenge && (
-          <ReadingChallenge readingChallenge={readingChallenge} />
-        )}
-
-        {loadingCreate && <Loader />}
-        {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
-
-        <h2>User Data</h2>
-        <Card
-          md={3}
-          className='my-3 p-3 rounded'
-          style={{ width: '30rem', backgroundColor: '' }}>
-          <Card.Body>
-            <Card.Title style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-              <strong>{name}</strong>
-            </Card.Title>
-            <Card.Text style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>
-              <strong>Email:</strong> {email}
-            </Card.Text>
-            <Button
-              variant='primary'
-              onClick={toggleEditMode}
-              style={{ fontSize: '1.2rem' }}>
-              {editMode ? 'Cancel' : 'Edit'}
-            </Button>
-          </Card.Body>
-        </Card>
-      </Col>
-
-      <Col>
-        {/* <Button
+      <Grid item>
+        <Button
           onClick={toggleEditMode}
-          size='lg'
-          className='mt-3 mb-3 px-4 py-2'>
+          size='large'
+          sx={{ mt: 3, mb: 3, px: 4, py: 2, fontSize: '1.5rem' }}
+          variant='contained'>
           {editMode ? 'Cancel' : 'Edit Profile'}
-        </Button> */}
+        </Button>
         {editMode && (
           <div>
-            <h2>Update</h2>
-            {message && <Message variant='danger'>{message}</Message>}
-            {error && <Message variant='danger'>{error}</Message>}
-            {loading && <Loader />}
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId='name'>
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  required
-                  type='name'
-                  placeholder='Enter name'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}></Form.Control>
-              </Form.Group>
+            <Typography variant='h4'>Update</Typography>
+            {message && (
+              <Typography variant='body1' color='error'>
+                {message}
+              </Typography>
+            )}
 
-              <Form.Group controlId='email'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                  required
-                  type='email'
-                  placeholder='Enter Email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='password'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Enter Password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='passwordConfirm'>
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Confirm Password'
-                  value={confirmPassword}
-                  onChange={(e) =>
-                    setConfirmPassword(e.target.value)
-                  }></Form.Control>
-              </Form.Group>
-
-              <Button type='submit' variant='primary'>
+            <form onSubmit={submitHandler}>
+              <TextField
+                required
+                fullWidth
+                label='Name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                margin='normal'
+              />
+              <TextField
+                required
+                fullWidth
+                label='Email Address'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin='normal'
+              />
+              <TextField
+                type='password'
+                fullWidth
+                label='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                margin='normal'
+              />
+              <TextField
+                type='password'
+                fullWidth
+                label='Confirm Password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                margin='normal'
+              />
+              <Button type='submit' variant='contained' color='primary'>
                 Update
               </Button>
-            </Form>
+            </form>
           </div>
         )}
-      </Col>
-    </Row>
+      </Grid>
+    </Grid>
   );
 }
 

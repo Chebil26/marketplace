@@ -11,7 +11,7 @@ function CommentsList({ postId }) {
   useEffect(() => {
     dispatch(listComments(postId));
   }, [dispatch, postId]);
-  
+
   return (
     <Container>
       <h3>Comments:</h3>
@@ -24,7 +24,10 @@ function CommentsList({ postId }) {
           {comments.map((comment) => (
             <ListGroup.Item key={comment.id}>
               <p>{comment.content}</p>
-              <p>By {comment.user.username} on {new Date(comment.created_at).toDateString()}</p>
+              <p>
+                By {comment.user.username} on{' '}
+                {new Date(comment.created_at).toDateString()}
+              </p>
             </ListGroup.Item>
           ))}
         </ListGroup>

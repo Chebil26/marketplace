@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { listStoreDetails } from '../actions/storeActions';
 
@@ -45,21 +45,28 @@ function Post({ post }) {
   };
 
   return (
-    <Card className='m-3'>
-      {/* <Card.Img variant="top" src={post.image} /> */}
-      <Card.Body>
-        <Link to={`/posts/${post.id}`}>
-          <Card.Title style={{ fontSize: '18px' }}>{post.title}</Card.Title>
-        </Link>
-        <Card.Subtitle>By {post.store}</Card.Subtitle>
-
-        <Card.Text>{truncateContent(post.content)}</Card.Text>
-        {/* <Button variant="primary">Read More</Button> */}
-      </Card.Body>
-      <Card.Footer>
-        <small className='text-muted'>{date}</small>
-      </Card.Footer>
-    </Card>
+    <Link to={`/posts/${post.id}`} style={{ textDecoration: 'none' }}>
+      <Card sx={{ m: 3 }}>
+        {/* <CardMedia component='img' height='140' image={post.image} alt={post.title} /> */}
+        <CardContent>
+          <Typography variant='h6' component='div' sx={{ fontSize: 18 }}>
+            {post.title}
+          </Typography>
+          <Typography variant='subtitle1' component='div'>
+            By {post.store}
+          </Typography>
+          <Typography variant='body2'>
+            {truncateContent(post.content)}
+          </Typography>
+          {/* <Button variant="contained" color="primary">Read More</Button> */}
+        </CardContent>
+        <CardContent>
+          <Typography variant='body2' color='text.secondary'>
+            {date}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
 

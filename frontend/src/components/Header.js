@@ -1,25 +1,46 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navbar, Nav, Button, Container, NavDropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-
-import { LinkContainer } from 'react-router-bootstrap';
-
-import SearchBox from './SearchBox';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  IconButton,
+  MenuItem,
+  Menu,
+  Box,
+} from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import { logout } from '../actions/userActions';
 import { createProduct } from '../actions/productActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
+import SearchBox from './SearchBox';
 
-function Header({ filterHandler, clearHandler }) {
-  const categories = [
-    'Fiction',
-    'Mystery',
-    'Science Fiction',
-    'Fantasy',
-    'Romance',
-  ];
+const StyledAppBar = styled(AppBar)`
+  background-color: #185b89;
+`;
 
-  const history = useNavigate();
+const StyledLink = styled(Link)`
+  color: #fff;
+  text-decoration: none;
+  margin-right: 1rem;
+`;
+
+const StyledTypography = styled(Typography)`
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledButton = styled(Button)`
+  text-transform: none;
+  margin-right: 1rem;
+`;
+
+function Header() {
+  const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -40,130 +61,110 @@ function Header({ filterHandler, clearHandler }) {
     dispatch({ type: PRODUCT_CREATE_RESET });
 
     if (successCreate) {
-      history(`/admin/product/edit/${createdProduct._id}/`);
+      navigate(`/admin/product/edit/${createdProduct._id}`);
     }
-  }, [dispatch, history, successCreate, createdProduct]);
+  }, [dispatch, navigate, successCreate, createdProduct]);
 
   const logoutHandler = () => {
     dispatch(logout());
-
-    history('/');
+    navigate('/');
   };
 
-  const createProductHandler = (product) => {
+  const createProductHandler = () => {
     dispatch(createProduct());
   };
+
+  // Dropdown Menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <header>
-      <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect>
+      <StyledAppBar position='static'>
         <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>Adeem</Navbar.Brand>
-          </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='mr-auto'>
-              <LinkContainer to='/cart'>
-                <Nav.Link>
-                  <i className='fas fa-shopping-cart'></i> Saved
-                </Nav.Link>
-              </LinkContainer>
-
-              {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'>
-                  <LinkContainer to='/profile'>
-                    <NavDropdown.Item>
-                      <i className='fas fa-user'></i> Profile
-                    </NavDropdown.Item>
-                  </LinkContainer>
-
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
-              ) : (
-                <LinkContainer to='/login'>
-                  <Nav.Link>
-                    <i className='fas fa-user'></i> Login
-                  </Nav.Link>
-                </LinkContainer>
-              )}
-
-              <LinkContainer to='/stores'>
-                <Nav.Link>Stores</Nav.Link>
-              </LinkContainer>
-
-              <LinkContainer to='/posts'>
-                <Nav.Link>Blogs</Nav.Link>
-              </LinkContainer>
-            </Nav>
-
-            <Nav className='mx-auto'>
-              <SearchBox />
-            </Nav>
-
-            <Nav className='justify-content-end'>
-              {userInfo && userInfo.isAdmin && (
-                <Nav>
-                  <LinkContainer to='/admin/productlist'>
-                    <Nav.Link>My Products</Nav.Link>
-                  </LinkContainer>
-
-                  <LinkContainer to='/blog'>
-                    <Nav.Link>My Blog</Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to={`/stores/${store.id}`}>
-                    <Nav.Link>{store.name}</Nav.Link>
-                  </LinkContainer>
-
-                  <Button
-                    className='mx-3'
-                    variant='secondary'
-                    onClick={createProductHandler}>
-                    <i className='fas fa-plus'></i> Create
-                  </Button>
-                </Nav>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      {/* Add subheader */}
-      {/* <Navbar
-        bg='light'
-        variant='light'
-        style={{ height: '50px' }}
-        collapseOnSelect>
-        <Container>
-          <Nav
-            className='d-flex align-items-center justify-content-center'
-            style={{ width: '100%' }}>
-            {categories.map((category, index) => (
-              <React.Fragment key={category}>
-                {index !== 0 && (
-                  <span
-                    style={{
-                      margin: '0 5px',
-                      borderLeft: '1px solid black',
-                      height: '14px',
-                      display: 'inline-block',
-                    }}></span>
-                )}
-                <Nav.Link
-                  style={{
-                    marginRight: '10px',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
+          <Toolbar>
+            <StyledLink to='/'>
+              <StyledTypography variant='h6' component='div'>
+                Adeem
+              </StyledTypography>
+            </StyledLink>
+            <StyledLink to='/cart'>
+              <StyledButton color='inherit'>
+                <i className='fas fa-shopping-cart'></i> Saved
+              </StyledButton>
+            </StyledLink>
+            {userInfo ? (
+              <div>
+                <StyledButton
+                  color='inherit'
+                  onClick={handleClick}
+                  endIcon={<i className='fas fa-caret-down'></i>}>
+                  {userInfo.name}
+                </StyledButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
                   }}
-                  onClick={() => filterHandler(category)}>
-                  {category}
-                </Nav.Link>
-              </React.Fragment>
-            ))}
-          </Nav>
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  getContentAnchorEl={null}>
+                  <MenuItem
+                    component={Link}
+                    to='/profile'
+                    onClick={handleClose}>
+                    <i className='fas fa-user'></i> Profile
+                  </MenuItem>
+                  <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <StyledLink to='/login'>
+                <StyledButton color='inherit'>
+                  <i className='fas fa-user'></i> Login
+                </StyledButton>
+              </StyledLink>
+            )}
+            <StyledLink to='/stores'>
+              <StyledButton color='inherit'>Stores</StyledButton>
+            </StyledLink>
+            <StyledLink to='/posts'>
+              <StyledButton color='inherit'>Blogs</StyledButton>
+            </StyledLink>
+            <SearchBox />
+            {userInfo && userInfo.isAdmin && (
+              <div>
+                <StyledLink to='/admin/productlist'>
+                  <StyledButton color='inherit'>My Products</StyledButton>
+                </StyledLink>
+                <StyledLink to='/blog'>
+                  <StyledButton color='inherit'>My Blog</StyledButton>
+                </StyledLink>
+                <StyledLink to={`/stores/${store.id}`}>
+                  <StyledButton color='inherit'>{store.name}</StyledButton>
+                </StyledLink>
+                <StyledButton
+                  variant='contained'
+                  color='success'
+                  onClick={createProductHandler}>
+                  <i className='fas fa-plus'></i> Create
+                </StyledButton>
+              </div>
+            )}
+          </Toolbar>
         </Container>
-      </Navbar> */}
+      </StyledAppBar>
     </header>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, CardContent, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import Rating from './Rating';
@@ -8,9 +8,7 @@ function Product({ product, authorHandler }) {
   const placeholder = `${process.env.REACT_APP_API_SERVER}/images/book_placeholder.png`;
 
   return (
-    <Card
-      className='my-1 p-2 rounded'
-      style={{ width: '10rem', overflow: 'hidden' }}>
+    <Card className='my-1 p-2 rounded' sx={{ width: 200, overflow: 'hidden' }}>
       <Link to={`/product/${product._id}`}>
         <div
           style={{
@@ -19,7 +17,7 @@ function Product({ product, authorHandler }) {
             overflow: 'hidden',
             position: 'relative',
           }}>
-          <Card.Img
+          <img
             src={
               product.image
                 ? `${process.env.REACT_APP_API_SERVER}${product.image}`
@@ -27,11 +25,12 @@ function Product({ product, authorHandler }) {
                 ? product.defaultImage
                 : placeholder
             }
+            alt={product.name}
             style={{
               position: 'absolute',
               top: '0',
               left: '50%',
-              transform: 'translateX(-50%)',
+              transform: 'translate(-50%, 0)',
               maxWidth: '100%',
               maxHeight: '100%',
               objectFit: 'cover',
@@ -39,32 +38,38 @@ function Product({ product, authorHandler }) {
           />
         </div>
       </Link>
-      <Card.Body className='p-0'>
+      <CardContent className='p-0'>
         <Link authorHandler>
-          <Card.Title
-            as='p'
-            style={{ fontSize: '15px', margin: '0', padding: '0' }}>
+          <Typography
+            variant='subtitle1'
+            component='p'
+            sx={{ margin: 0, padding: 0 }}>
             <strong>{product.name}</strong>
-          </Card.Title>
+          </Typography>
         </Link>
 
         <Link onClick={() => authorHandler(product.author)}>
-          <Card.Text
-            as='p'
-            style={{ fontSize: '13px', margin: '0', padding: '0' }}>
+          <Typography
+            variant='subtitle2'
+            component='p'
+            sx={{ margin: 0, padding: 0 }}>
             {product.author}
-          </Card.Text>
+          </Typography>
         </Link>
 
         <Link to={`/stores/${product.store_id}`}>
-          <Card.Title
-            as='p'
-            style={{ fontSize: '14px', margin: '0', padding: '0' }}>
+          <Typography
+            variant='subtitle1'
+            component='p'
+            sx={{ margin: 0, padding: 0 }}>
             <strong>{product.store}</strong>
-          </Card.Title>
+          </Typography>
         </Link>
 
-        <Card.Text as='p' style={{ margin: '0', padding: '0' }}>
+        <Typography
+          variant='body1'
+          component='p'
+          sx={{ margin: 0, padding: 0 }}>
           <div className='my-1'>
             <Rating
               value={product.rating}
@@ -72,14 +77,15 @@ function Product({ product, authorHandler }) {
               color={'#f8e825'}
             />
           </div>
-        </Card.Text>
+        </Typography>
 
-        <Card.Text
-          as='p'
-          style={{ fontSize: '13px', margin: '0', padding: '0' }}>
+        <Typography
+          variant='subtitle2'
+          component='p'
+          sx={{ margin: 0, padding: 0 }}>
           {product.price}DA
-        </Card.Text>
-      </Card.Body>
+        </Typography>
+      </CardContent>
     </Card>
   );
 }

@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Button,
+  Container,
+  Grid,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+} from '@mui/material';
 
-import { Button, Col, Container, Dropdown, Row, Image } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
 import FeaturedStores from '../components/FeaturedStores';
@@ -12,9 +21,9 @@ import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import FilterDropdownMenu from '../components/FilterDropdownMenu';
 import Post from '../components/Post';
-import Product from '../components/Product';
 import { getPosts } from '../features/postSlice';
 import CategoriesHeader from '../components/CategoriesHeader';
+import Product from '../components/Product';
 
 function HomeScreen() {
   const location = useLocation();
@@ -35,7 +44,6 @@ function HomeScreen() {
 
   const queryParams = new URLSearchParams(location.search);
   let keywordHeader = queryParams.get('keyword');
-  // setKey(keyword)
 
   useEffect(() => {
     if (keyword) {
@@ -67,7 +75,6 @@ function HomeScreen() {
   };
 
   const filterHandler = (category) => {
-    // setFilter(`?keyword=${category.toLowerCase()}&page=1`);
     history(`?keyword=${category.toLowerCase()}&page=1`);
   };
 
@@ -82,154 +89,133 @@ function HomeScreen() {
         filterHandler={filterHandler}
         clearHandler={clearHandler}
       />
-      <div
-        style={{
-          margin: 0,
-          padding: 0,
-
-          overflow: 'visible',
-        }}>
+      <Box marginTop={2}>
         {!keyword && (
-          <Container fluid>
-            <Row>
-              <Col>
-                <Image
+          <Container>
+            <Grid container justifyContent='center'>
+              <Grid item xs={12} md={10}>
+                <img
                   src='https://i.postimg.cc/mrNF47fr/906-generated.jpg'
                   alt='Banner'
-                  fluid
+                  style={{ width: '100%', height: 'auto' }}
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
           </Container>
         )}
-        {/* {!keyword && <ProductCarousel />}
-        {!keyword && (
-          <Row>
-            {storesLoading ? (
-              <Loader />
-            ) : storesError ? (
-              <Message variant='danger'>{storesError}</Message>
-            ) : (
-              <FeaturedStores stores={stores} />
-            )}
-          </Row>
-        )} */}
 
-        {/* <Row
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1rem',
-        }}>
-        <Col></Col>
-      </Row> */}
+        <Container>
+          <Box marginTop={4}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={9}>
+                <Typography
+                  variant='h6'
+                  component='h2'
+                  color='primary'
+                  fontWeight='bold'
+                  marginBottom='0.5rem'>
+                  {keyword ? `'${keywordHeader}'` : 'Books'}
+                </Typography>
+                {/* <FilterDropdownMenu
+                  categories={categories}
+                  filterHandler={filterHandler}
+                  clearHandler={clearHandler}
+                /> */}
 
-        {/* {!keyword && <StoreCarousel />}
-      {!keyword && <ProductCarousel />} */}
+                {loading ? (
+                  <Loader />
+                ) : error ? (
+                  <Message variant='danger'>{error}</Message>
+                ) : (
+                  <Grid container spacing={1}>
+                    {products.map((product) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={3}
+                        key={product._id}
+                        sx={{ margin: '0', padding: '0' }}>
+                        <Product
+                          product={product}
+                          authorHandler={authorHandler}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </Grid>
+              {!keyword && (
+                <Grid item xs={12} md={3}>
+                  <Box
+                    className='my-5'
+                    style={{
+                      height: '1500px',
+                      padding: '10px',
+                      overflowY: 'auto',
+                      scrollbarWidth: 'thin',
+                      scrollbarColor: '#888888 #f2f2f2',
+                    }}>
+                    <style>
+                      {`
+                      ::-webkit-scrollbar {
+                        width: 8px;
+                      }
+        
+                      ::-webkit-scrollbar-thumb {
+                        background-color: #888888;
+                        border-radius: 4px;
+                      }
+        
+                      ::-webkit-scrollbar-thumb:hover {
+                        background-color: #555555;
+                      }
+        
+                      ::-webkit-scrollbar-track {
+                        background-color: #f2f2f2;
+                      }
+                    `}
+                    </style>
 
-        <Row>
-          <Col md={9}>
-            <h2
-              style={{
-                color: '#18bc9c',
-                fontWeight: 'bold',
-                marginBottom: '0.5rem',
-              }}>
-              {keyword ? `'${keywordHeader}'` : 'Books'}
-            </h2>
-            <FilterDropdownMenu
-              categories={categories}
-              filterHandler={filterHandler}
-              clearHandler={clearHandler}
-            />
-
-            {loading ? (
-              <Loader />
-            ) : error ? (
-              <Message variant='danger'>{error}</Message>
-            ) : (
-              <Row>
-                {products.map((product) => (
-                  <Col
-                    key={product._id}
-                    // md={5}
-                    // lg={4}
-                    // xl={3}
-                    // style={{ width: '200px', height: '300px' }}
-                  >
-                    <Product product={product} authorHandler={authorHandler} />
-                  </Col>
-                ))}
-              </Row>
-            )}
-          </Col>
-          {!keyword && (
-            <Col md={3}>
-              <Container
-                className='my-5'
-                style={{
-                  height: '1500px',
-                  padding: '10px',
-                  overflowY: 'auto',
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: '#888888 #f2f2f2',
-                }}>
-                <style>
-                  {`
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background-color: #888888;
-        border-radius: 4px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: #555555;
-      }
-
-      ::-webkit-scrollbar-track {
-        background-color: #f2f2f2;
-      }
-    `}
-                </style>
-
-                <h3
-                  style={{
-                    color: '#18bc9c',
-                    fontWeight: 'bold',
-                    marginBottom: '1rem',
-                  }}>
-                  Posts
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {posts.slice(0, 4).map((post) => (
-                    <div key={post._id} className='mb-3'>
-                      <Post post={post} />
+                    <Typography
+                      variant='h6'
+                      component='h3'
+                      color='primary'
+                      fontWeight='bold'
+                      marginBottom='1rem'>
+                      Posts
+                    </Typography>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {posts.slice(0, 4).map((post) => (
+                        <div key={post._id} className='mb-3'>
+                          <Post post={post} />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: 'auto',
-                  }}>
-                  <Link to='/posts'>
-                    <Button variant='primary' className='mt-auto'>
-                      Continue Reading
-                    </Button>
-                  </Link>
-                </div>
-              </Container>
-            </Col>
-          )}
-        </Row>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: 'auto',
+                      }}>
+                      <RouterLink to='/posts'>
+                        <Button
+                          variant='contained'
+                          color='primary'
+                          className='mt-auto'>
+                          Continue Reading
+                        </Button>
+                      </RouterLink>
+                    </div>
+                  </Box>
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+        </Container>
+      </Box>
 
-        <Paginate page={page} pages={pages} keyword={keyword} />
-      </div>
+      <Paginate page={page} pages={pages} keyword={keyword} />
     </>
   );
 }

@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Badge,
+  Chip,
+  Box,
   Button,
   Card,
-  Col,
-  Form,
-  Image,
-  ListGroup,
-  Row,
-} from 'react-bootstrap';
+  CardContent,
+  CardMedia,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   createProductReview,
   listProductDetails,
@@ -19,17 +29,15 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
-
 import { getBookRecommendations } from '../actions/recommendationActions';
 
-function ProductScreen({ match }) {
+const ProductScreen = ({ match }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [recommended, setRecommended] = useState(null);
 
   const placeholder = '/images/book_placeholder.png';
 
-  let history = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
@@ -60,8 +68,12 @@ function ProductScreen({ match }) {
     }
     dispatch(listProductDetails(id));
     dispatch(getBookRecommendations(product.name));
-  }, [dispatch, match, successProductReview, product.name]);
-  // Clear the recommendations state after using it
+
+    return () => {
+      // Clear the recommendations state after using it
+      dispatch({ type: 'CLEAR_BOOK_RECOMMENDATIONS' });
+    };
+  }, [dispatch, id, successProductReview, product.name]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -73,16 +85,18 @@ function ProductScreen({ match }) {
     );
   };
 
-  // const { id } = useParams();
-  // const product = products.find((p) => String(p._id) === id)
-
   const addToCartHandler = () => {
-    history(`/cart/${id}`);
+    navigate(`/cart/${id}`);
   };
 
   return (
-    <div>
-      <Link to='/' className='btn btn-light my-3'>
+    <Container>
+      <Link
+        to='/'
+        component={Button}
+        variant='outlined'
+        color='primary'
+        sx={{ mb: 3 }}>
         Go back
       </Link>
       {loading ? (
@@ -90,203 +104,228 @@ function ProductScreen({ match }) {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <div>
-          <Row>
-            <Col md={3}>
-              <Image
-                src={
-                  productDetails.product.image
-                    ? `${process.env.REACT_APP_API_SERVER}${productDetails.product.image}`
-                    : productDetails.product.defaultImage
-                    ? productDetails.product.defaultImage
-                    : placeholder
+        <Grid container spacing={2}>
+          <Grid item md={3}>
+            <Card>
+              <CardMedia
+                component='img'
+                height='400'
+                width='160'
+                image={
+                  product.image
+                    ? `${process.env.REACT_APP_API_SERVER}${product.image}`
+                    : product.defaultImage || placeholder
                 }
                 alt={product.name}
-                fluid
-                style={{ width: '70%' }}
               />
-              <ListGroup variant='flush'>
-                <ListGroup.Item>
-                  <h4>
-                    <Rating
-                      value={product.rating}
-                      text={`(${product.numReviews}) `}
-                      color={'#f8e825'}
-                    />
-                  </h4>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h5>ISBN: {product.isbn}</h5>
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-            <Col md={6}>
-              <ListGroup variant='flush'>
-                <ListGroup.Item>
-                  <h4>{product.name}</h4>
-                  <h4>by {product.author}</h4>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <Link to={`/stores/${product.store_id}`}>
-                    <h4>Store: {product.store}</h4>
+              <CardContent>
+                <Typography variant='subtitle1' component='div'>
+                  <Rating
+                    value={product.rating}
+                    text={`(${product.numReviews})`}
+                    color='#f8e825'
+                  />
+                </Typography>
+                <Typography variant='subtitle1' component='div'>
+                  ISBN: {product.isbn}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant='h4' component='h2'>
+                  {product.name}
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  by {product.author}
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  <Link to={`/stores/${product.store_id}`} color='inherit'>
+                    Store: {product.store}
                   </Link>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h4>Price: {product.price}DA</h4>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h4>Categories: {product.category}</h4>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h4>Description:</h4>
-                  <p>{product.description}</p>
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-
-            <Col md={3}>
-              <Card>
-                <ListGroup variant='flush'>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Price: </Col>
-                      <Col>
-                        <strong>{product.price} DA</strong>{' '}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Status: </Col>
-                      {/* <Col>
-                                {product.available == true ? 'In Stock' : 'Out of Stock'}
-                            </Col> */}
-                      <Badge className='danger' style={{ height: '50px' }}>
-                        <h5>
-                          {product.available ? 'Available' : 'unavailable'}
-                        </h5>
-                      </Badge>
-                    </Row>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <Button
-                      className='btn btn-lg btn-primary'
-                      onClick={addToCartHandler}
-                      disabled={product.available == false}
-                      type='button'>
-                      Save
-                    </Button>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
-              {recommendations && (
-                <div>
-                  <h4>Recommended Books</h4>
-                  <Row>
-                    {Object.keys(recommendations).map((bookTitle) => (
-                      <Col md={6} key={bookTitle}>
-                        <Card className='mb-4'>
-                          <Card.Img
-                            variant='top'
-                            src={recommendations[bookTitle]['Image-URL-M']}
-                          />
-                          <Card.Body>
-                            <Card.Title>{bookTitle}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>
-                              {recommendations[bookTitle]['Book-Author']}
-                            </Card.Subtitle>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </div>
-              )}
-            </Col>
-          </Row>
-
-          <Row>
-            <Col md={6}>
-              <h4>Reviews</h4>
-              {product.reviews.length === 0 && (
-                <Message variant='info'>No Reviews</Message>
-              )}
-
-              <ListGroup variant='flush'>
-                {product.reviews.map((review) => (
-                  <ListGroup.Item key={review._id}>
-                    <storng>{review.name}</storng>
-                    <Rating value={review.rating} color={'#f8e825'} />
-                    <p>{review.createdAt.substring(0, 10)}</p>
-                    <p>{review.comment}</p>
-                  </ListGroup.Item>
-                ))}
-
-                <ListGroup.Item>
-                  <h4>Write a review</h4>
-                  {loadingProductReview && <Loader />}
-                  {successProductReview && (
-                    <Message variant='success'>Review Submitted</Message>
-                  )}
-                  {errorProductReview && (
-                    <Message variant='danger'>{errorProductReview}</Message>
-                  )}
-                  {userInfo ? (
-                    <Form onSubmit={submitHandler}>
-                      <Form.Group controlId='rating'>
-                        <Form.Label>Rating</Form.Label>
-                        <Form.Control
-                          as='select'
-                          value={rating}
-                          onChange={(e) => setRating(e.target.value)}>
-                          <option value=''>Select...</option>
-                          <option value='1'>1 - Poor</option>
-                          <option value='2'>2 - Fair</option>
-                          <option value='3'>3 - Good</option>
-                          <option value='4'>4 - Very Good</option>
-                          <option value='5'>5 - Excellent</option>
-                        </Form.Control>
-                      </Form.Group>
-                      <Form.Group controlId='comment'>
-                        <Form.Label>Review</Form.Label>
-                        <Form.Control
-                          as='textarea'
-                          row='5'
-                          value={comment}
-                          onChange={(e) =>
-                            setComment(e.target.value)
-                          }></Form.Control>
-                      </Form.Group>
-
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Price: {product.price}DA
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Categories:
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Categories:
+                </Typography>
+                <Box sx={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {product.category &&
+                    product.category.split(',').map((category) => (
                       <Button
-                        disabled={loadingProductReview}
-                        type='submit'
-                        variant='success'>
-                        Submit
+                        key={category.trim()}
+                        variant='contained'
+                        color='primary'
+                        size='small'
+                        sx={{ mb: 1 }}>
+                        {category.trim()}
                       </Button>
-                    </Form>
-                  ) : (
-                    <Message variant='info'>
-                      Please <Link to='/login'>login</Link> to write a review
-                    </Message>
-                  )}
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-          </Row>
-        </div>
+                    ))}
+                </Box>
+
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Description:
+                </Typography>
+                <Typography variant='body1' component='p'>
+                  {product.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={3}>
+            <Card>
+              <CardContent>
+                <Typography variant='h6' component='div'>
+                  Price:
+                </Typography>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  <strong>{product.price} DA</strong>
+                </Typography>
+                <Typography variant='h6' component='div'>
+                  Availability:
+                </Typography>
+                <Chip
+                  label={product.available ? 'Available' : 'Unavailable'}
+                  color={product.available ? 'success' : 'error'}
+                  sx={{ mb: 2 }}
+                />
+                <Button
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  onClick={addToCartHandler}
+                  // disabled={!product.available}
+                  fullWidth
+                  sx={{ mt: 2 }}>
+                  Add to Cart
+                </Button>
+              </CardContent>
+            </Card>
+            {recommendations && Object.keys(recommendations).length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Recommended Books
+                </Typography>
+                <Slider
+                  arrows={true}
+                  dots={false}
+                  swipe={true}
+                  infinite={true}
+                  slidesToShow={2}
+                  slidesToScroll={1}>
+                  {Object.keys(recommendations).map((bookTitle) => {
+                    const book = recommendations[bookTitle];
+                    return (
+                      <Card key={bookTitle}>
+                        <CardMedia
+                          component='img'
+                          height='200'
+                          image={book && book['Image-URL-M']}
+                          alt={bookTitle}
+                        />
+                        <CardContent>
+                          <Typography
+                            variant='h6'
+                            component='div'
+                            sx={{ mb: 1 }}>
+                            {bookTitle}
+                          </Typography>
+                          <Typography variant='subtitle1' component='div'>
+                            {book && book['Book-Author']}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </Slider>
+              </Box>
+            )}
+          </Grid>
+          <Grid item md={6}>
+            <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+              Reviews
+            </Typography>
+            {product.reviews.length === 0 ? (
+              <Message variant='info'>No Reviews</Message>
+            ) : (
+              <CardContent>
+                {product.reviews.map((review) => (
+                  <Box key={review._id} sx={{ mb: 3 }}>
+                    <Typography variant='subtitle1' component='div'>
+                      <strong>{review.name}</strong>
+                    </Typography>
+                    <Rating value={review.rating} color={'#f8e825'} />
+                    <Typography variant='subtitle1' component='div'>
+                      {review.createdAt.substring(0, 10)}
+                    </Typography>
+                    <Typography variant='body1' component='p' sx={{ mb: 2 }}>
+                      {review.comment}
+                    </Typography>
+                  </Box>
+                ))}
+                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+                  Write a Customer Review
+                </Typography>
+                {loadingProductReview && <Loader />}
+                {successProductReview && (
+                  <Message variant='success'>
+                    Review submitted successfully
+                  </Message>
+                )}
+                {errorProductReview && (
+                  <Message variant='danger'>{errorProductReview}</Message>
+                )}
+                {userInfo ? (
+                  <Box component='form' onSubmit={submitHandler}>
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel>Rating</InputLabel>
+                      <Select
+                        value={rating}
+                        onChange={(e) => setRating(e.target.value)}>
+                        <MenuItem value={1}>1 - Poor</MenuItem>
+                        <MenuItem value={2}>2 - Fair</MenuItem>
+                        <MenuItem value={3}>3 - Good</MenuItem>
+                        <MenuItem value={4}>4 - Very Good</MenuItem>
+                        <MenuItem value={5}>5 - Excellent</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <TextField
+                      variant='outlined'
+                      label='Comment'
+                      fullWidth
+                      multiline
+                      rows={4}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      sx={{ mb: 2 }}
+                    />
+                    <Button
+                      type='submit'
+                      variant='contained'
+                      color='primary'
+                      size='large'
+                      fullWidth>
+                      Submit
+                    </Button>
+                  </Box>
+                ) : (
+                  <Message variant='info'>
+                    Please <Link to='/login'>sign in</Link> to write a review
+                  </Message>
+                )}
+              </CardContent>
+            )}
+          </Grid>
+        </Grid>
       )}
-    </div>
+    </Container>
   );
-}
+};
 
 export default ProductScreen;
-
-// const products = await axios.get(`/api/products/store/${store.id}/`);

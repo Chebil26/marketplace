@@ -1,36 +1,40 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { TextField, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function SearchBox() {
-  let history = useNavigate();
+  let navigate = useNavigate();
   const location = useLocation();
 
   const [keyword, setKeyword] = useState('');
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword) {
-      history(`/?keyword=${keyword}&page=1`);
+      navigate(`/?keyword=${keyword}&page=1`);
     } else {
-      history(location.pathname);
+      navigate(location.pathname);
     }
   };
-  return (
-    <Form onSubmit={submitHandler} className='d-flex'>
-      <Form.Group className='mb-1'>
-        <Form.Control
-          type='search'
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder='Explore'
-          aria-label='Search'
-          style={{ width: '400px' }} // Adjust the width as needed
-        />
-      </Form.Group>
 
-      <Button className='mx-1' type='submit' variant='success'>
+  return (
+    <form onSubmit={submitHandler} style={{ display: 'flex' }}>
+      <TextField
+        type='search'
+        onChange={(e) => setKeyword(e.target.value)}
+        placeholder='Explore'
+        variant='outlined'
+        size='small'
+        style={{
+          width: '500px',
+          borderRadius: '10px',
+          marginRight: '8px',
+          backgroundColor: 'white',
+        }}
+      />
+      <Button type='submit' variant='contained' color='success'>
         <i className='fas fa-search'></i>
       </Button>
-    </Form>
+    </form>
   );
 }
 

@@ -15,6 +15,7 @@ import BookDetailScreen from './screens/BookDetailScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
@@ -41,6 +42,7 @@ function App() {
                 <Route path='/login' Component={LoginScreen} />
                 <Route path='/register' Component={RegisterScreen} />
                 <Route path='/profile' Component={ProfileScreen} />
+                <Route path='/user-profile' Component={UserProfileScreen} />
 
                 <Route path='/product/:id' Component={ProductScreen} />
 

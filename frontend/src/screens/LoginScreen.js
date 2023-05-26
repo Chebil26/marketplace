@@ -1,88 +1,82 @@
-import React, {useState, useEffect} from 'react'
-import { Link , useNavigate } from 'react-router-dom'
-import { Form, Button , Row , Col } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import FormContainer from '../components/FormContainer'
-import { login } from '../actions/userActions'
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import FormContainer from '../components/FormContainer';
+import { login } from '../actions/userActions';
 
+function LoginScreen({ location }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
+  const dispatch = useDispatch();
 
-function LoginScreen({location}) {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    let history = useNavigate()
+  const redirect = window.location.search
+    ? window.location.search.split('=')[1]
+    : '/';
 
-    const dispatch = useDispatch()
+  const userLogin = useSelector((state) => state.userLogin);
+  const { error, loading, userInfo } = userLogin;
 
-
-    const redirect = window.location.search ? window.location.search.split('=')[1] : '/'
-
-    const userLogin = useSelector(state => state.userLogin)
-    const {error, loading, userInfo} = userLogin
-
-    useEffect(() => {
-        if(userInfo) {
-            history('/')
-        }
-    }, [history, userInfo])
-
-    const submitHandler = (e) => {
-        e.preventDefault()
-        dispatch(login(email, password))
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
     }
+  }, [navigate, userInfo]);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(login(email, password));
+  };
 
   return (
     <FormContainer>
-        <h1>Sign in</h1>
-        {error && <Message variant='danger'>{error}</Message>}
-        {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-            <Form.Group controlId='email'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                    type='email'
-                    placeholder='Enter Email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                >
-
-                </Form.Control>
-            </Form.Group>
-
-
-            <Form.Group controlId='password'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                    type='password'
-                    placeholder='Enter Password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                >
-
-                </Form.Control>
-            </Form.Group>
-
-            <Button type='submit' variant='primary'>
-                Sign in
-            </Button>
-        </Form>
-
-        <Row className='py-3'>
-            <Col>
-                New? 
-                <Link 
-                    to={redirect ? `/register?redirect=${redirect}` : '/login'}
-                    
-                >
-                    Register
-                </Link>
-            </Col>
-        </Row>
+      <Typography variant='h3' component='h3'>
+        Sign in
+      </Typography>
+      {error && <Message variant='danger'>{error}</Message>}
+      {loading && <Loader />}
+      <Box component='form' onSubmit={submitHandler} sx={{ mt: 3 }}>
+        <TextField
+          id='email'
+          label='Email Address'
+          type='email'
+          variant='outlined'
+          fullWidth
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          sx={{ mb: 3 }}
+        />
+        <TextField
+          id='password'
+          label='Password'
+          type='password'
+          variant='outlined'
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ mb: 3 }}
+        />
+        <Button type='submit' variant='contained' color='primary' fullWidth>
+          Sign in
+        </Button>
+      </Box>
+      <Box sx={{ py: 3 }}>
+        <Typography variant='body1' component='p'>
+          New?{' '}
+          <RouterLink
+            to={redirect ? `/register?redirect=${redirect}` : '/login'}
+            style={{ textDecoration: 'none' }}>
+            Register
+          </RouterLink>
+        </Typography>
+      </Box>
     </FormContainer>
-  )
+  );
 }
 
-export default LoginScreen
+export default LoginScreen;
