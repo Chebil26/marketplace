@@ -30,18 +30,36 @@ class Command(BaseCommand):
                 
                 categories_combined = ', '.join(categories_list)
 
-                book = Book(
+                # book = Book(
+
+                
+                #     isbn=row[7],
+                #     title=row[1],
+                #     author=row[3],
+                #     cover=row[21],                    
+                #     description=row[5],
+                #     published_year=row[15],
+                #     categories=categories_combined,
+
+                # )
+
+                product = Product(
 
                 
                     isbn=row[7],
-                    title=row[1],
+                    name=row[1],
                     author=row[3],
-                    cover=row[21],                    
+                    defaultImage=row[21],
+                    price=int(random.randint(3, 16) * 100),
+                    
                     description=row[5],
                     published_year=row[15],
-                    categories=categories_combined,
+                    publisher=row[13],
+
+                    category=categories_combined,
 
                 )
+
 
                     #main_dataset
 
@@ -89,5 +107,5 @@ class Command(BaseCommand):
                 
 
 
-                book.save()
+                product.save()
         self.stdout.write(self.style.SUCCESS('Data loaded successfully.'))
