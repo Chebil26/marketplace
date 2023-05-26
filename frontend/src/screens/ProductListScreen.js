@@ -92,6 +92,8 @@ function ProductListScreen({ match }) {
     dispatch(createProduct());
   };
 
+  console.log(store);
+
   return (
     <div>
       <Row className='align-items-center'>

@@ -61,6 +61,11 @@ function HomeScreen() {
     'Self Help',
   ];
 
+  const authorHandler = (author) => {
+    history(`?keyword=${author}&page=1`);
+    console.log(author);
+  };
+
   const filterHandler = (category) => {
     // setFilter(`?keyword=${category.toLowerCase()}&page=1`);
     history(`?keyword=${category.toLowerCase()}&page=1`);
@@ -153,7 +158,7 @@ function HomeScreen() {
                     // xl={3}
                     // style={{ width: '200px', height: '300px' }}
                   >
-                    <Product product={product} />
+                    <Product product={product} authorHandler={authorHandler} />
                   </Col>
                 ))}
               </Row>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Rating from './Rating';
 
-function Product({ product }) {
+function Product({ product, authorHandler }) {
   const placeholder = `${process.env.REACT_APP_API_SERVER}/images/book_placeholder.png`;
 
   return (
@@ -40,18 +40,21 @@ function Product({ product }) {
         </div>
       </Link>
       <Card.Body className='p-0'>
-        <Link to={`/product/${product._id}`}>
+        <Link authorHandler>
           <Card.Title
             as='p'
             style={{ fontSize: '15px', margin: '0', padding: '0' }}>
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
-        <Card.Text
-          as='p'
-          style={{ fontSize: '13px', margin: '0', padding: '0' }}>
-          {product.author}
-        </Card.Text>
+
+        <Link onClick={() => authorHandler(product.author)}>
+          <Card.Text
+            as='p'
+            style={{ fontSize: '13px', margin: '0', padding: '0' }}>
+            {product.author}
+          </Card.Text>
+        </Link>
 
         <Link to={`/stores/${product.store_id}`}>
           <Card.Title
