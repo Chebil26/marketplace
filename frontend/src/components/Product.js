@@ -48,7 +48,7 @@ function Product({ product, authorHandler }) {
           </Typography>
         </Link>
 
-        <Link onClick={() => authorHandler(product.author)}>
+        <Link to={`?keyword=${product.author}&page=1`}>
           <Typography
             variant='subtitle2'
             component='p'

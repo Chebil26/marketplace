@@ -120,11 +120,11 @@ function HomeScreen() {
         {!isKeywordExists && (
           <Container>
             <Grid container justifyContent='center'>
-              <Grid item xs={12} md={10}>
+              <Grid>
                 <img
-                  src='https://i.postimg.cc/mrNF47fr/906-generated.jpg'
+                  src='https://i.postimg.cc/FRz8M1Rh/9066-1.jpg'
                   alt='Banner'
-                  style={{ width: '100%', height: 'auto' }}
+                  style={{ width: '100%', height: '100%' }}
                 />
               </Grid>
             </Grid>
@@ -222,16 +222,17 @@ function HomeScreen() {
                       marginBottom='1rem'>
                       Stores
                     </Typography>
-
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <Slider {...settings}>
-                        {stores.slice(0, 4).map((store) => (
-                          <div key={store._id} className='mb-3'>
-                            <Store store={store} />
-                          </div>
-                        ))}
-                      </Slider>
-                    </div>
+                    {stores && (
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Slider {...settings}>
+                          {stores.slice(0, 4).map((store) => (
+                            <div key={store._id} className='mb-3'>
+                              <Store store={store} />
+                            </div>
+                          ))}
+                        </Slider>
+                      </div>
+                    )}
 
                     <div
                       style={{
@@ -239,7 +240,7 @@ function HomeScreen() {
                         justifyContent: 'center',
                         marginTop: 'auto',
                       }}>
-                      <RouterLink to='/posts'>
+                      <RouterLink to='/stores'>
                         <Button
                           variant='contained'
                           color='success'
