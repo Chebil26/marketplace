@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Typography, Divider } from '@mui/material';
 
 import { getPosts } from '../features/postSlice';
 
@@ -29,14 +29,15 @@ function PostsListScreen() {
   }
 
   return (
-    <Container className="my-5">
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {posts.map((post) => (
-          // <Link key={post.id} to={`/posts/${post.id}`} style={{ textDecoration: 'none' }}>
-          <Post post={post} />
-          // {/* </Link> */}
-        ))}
-      </div>
+    <Container maxWidth='md' sx={{ my: 5 }}>
+      {posts.map((post, index) => (
+        <div key={post.id}>
+          <Link to={`/posts/${post.id}`} style={{ textDecoration: 'none' }}>
+            <Post post={post} />
+          </Link>
+          {index < posts.length - 1 && <Divider sx={{ my: 2 }} />}
+        </div>
+      ))}
     </Container>
   );
 }

@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+
 import Slider from 'react-slick';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
@@ -103,6 +104,11 @@ function HomeScreen() {
     history(`?keyword=${value}&page=1`);
   };
 
+  const handleClearSearch = () => {
+    setFilter('');
+    history(`?keyword=&page=1`);
+  };
+
   return (
     <>
       <CategoriesHeader
@@ -166,7 +172,9 @@ function HomeScreen() {
                     onClick={() => history(`?keyword=${filter}&page=1`)}>
                     <SearchIcon />
                   </IconButton>
+                  <IconButton onClick={() => handleClearSearch()}></IconButton>
                 </Box>
+
                 {/* <FilterDropdownMenu
                   categories={categories}
                   filterHandler={filterHandler}

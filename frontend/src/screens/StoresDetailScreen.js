@@ -53,7 +53,7 @@ function StoreDetailScreen() {
               component='img'
               src={`${process.env.REACT_APP_API_SERVER}${store.image}`}
               alt={store.name}
-              sx={{ width: 200, height: 200, borderRadius: '50%', mr: 2 }}
+              sx={{ width: 200, height: 200, borderRadius: '10%', mr: 2 }}
             />
           )}
           <div>
