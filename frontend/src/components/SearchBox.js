@@ -25,7 +25,6 @@ function SearchBox() {
         variant='outlined'
         size='small'
         style={{
-          width: '500px',
           borderRadius: '10px',
           marginRight: '8px',
           backgroundColor: 'white',

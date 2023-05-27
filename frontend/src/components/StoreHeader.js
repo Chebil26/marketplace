@@ -1,35 +1,56 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  CardMedia,
+} from '@mui/material';
 
 const StoreHeader = () => {
-    const storeDetails = useSelector(state => state.storeDetails)
-    const { error, loading, store } = storeDetails
-    console.log(store)
+  const storeDetails = useSelector((state) => state.storeDetails);
+  const { error, loading, store } = storeDetails;
 
   return (
-    <Navbar bg="light" expand="lg">
-      <Container>
-        <LinkContainer to={`/stores/${store.id}`}>
-          <Navbar.Brand>Home</Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <LinkContainer to={`/stores/${store.id}/contact`}>
-              <Nav.Link>Contact</Nav.Link>
-            </LinkContainer>
+    <AppBar position='static' sx={{ bgcolor: '#4D86DB' }}>
+      <Toolbar>
+        <Box>
+          <CardMedia
+            component='img'
+            src={`${process.env.REACT_APP_API_SERVER}${store.image}`}
+            alt={store.name}
+            sx={{ height: 40, width: 40, borderRadius: '50%', marginRight: 1 }}
+          />
+        </Box>
 
-            <LinkContainer to={`/stores/${store.id}/blog`}>
-              <Nav.Link>Blog</Nav.Link>
-            </LinkContainer>
-          </Nav>
-
-       
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        <Box>
+          <Typography variant='h6' component='div' sx={{ pr: 2 }}>
+            <Link
+              to={`/stores/${store.id}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}>
+              {store.name}
+            </Link>
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex' }}>
+          <Button
+            component={Link}
+            to={`/stores/${store.id}/contact`}
+            color='inherit'>
+            Contact
+          </Button>
+          <Button
+            component={Link}
+            to={`/stores/${store.id}/blog`}
+            color='inherit'>
+            Blog
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

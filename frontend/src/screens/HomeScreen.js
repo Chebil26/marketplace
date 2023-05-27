@@ -1,36 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 import {
+  Box,
   Button,
   Container,
   Grid,
+  IconButton,
+  TextField,
   Typography,
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField, // Import TextField component from Material-UI
-  IconButton, // Import IconButton component from Material-UI
-  // Import SearchIcon component from Material-UI
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SearchIcon from '@mui/icons-material/Search';
+import Slider from 'react-slick';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { listProducts } from '../actions/productActions';
 import { listStores } from '../actions/storeActions';
-import FeaturedStores from '../components/FeaturedStores';
-import ProductCarousel from '../components/ProductCarousel';
+import CategoriesHeader from '../components/CategoriesHeader';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
-import FilterDropdownMenu from '../components/FilterDropdownMenu';
 import Post from '../components/Post';
-import { getPosts } from '../features/postSlice';
-import CategoriesHeader from '../components/CategoriesHeader';
 import Product from '../components/Product';
+import { getPosts } from '../features/postSlice';
+import Store from '../components/Store';
 
 function HomeScreen() {
+  const settings = {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true, // Show arrows for navigation
+    prevArrow: <ChevronLeft />, // Replace with your custom previous arrow component
+    nextArrow: <ChevronRight />, // Replace with your custom next arrow component
+    dots: true,
+    infinite: true,
+  };
   const location = useLocation();
   let history = useNavigate();
   const dispatch = useDispatch();
@@ -50,7 +57,10 @@ function HomeScreen() {
   const queryParams = new URLSearchParams(location.search);
   let keywordHeader = queryParams.get('keyword');
 
+  const [isKeywordExists, setIsKeywordExists] = useState(false);
+
   useEffect(() => {
+    setIsKeywordExists(Boolean(keyword));
     if (keyword) {
       dispatch(listProducts(keyword));
     } else if (filter) {
@@ -101,7 +111,7 @@ function HomeScreen() {
         clearHandler={clearHandler}
       />
       <Box marginTop={2}>
-        {!keyword && (
+        {!isKeywordExists && (
           <Container>
             <Grid container justifyContent='center'>
               <Grid item xs={12} md={10}>
@@ -118,7 +128,7 @@ function HomeScreen() {
         <Container>
           <Box marginTop={4}>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={9}>
+              <Grid item xs={keyword ? 12 : 9} md={keyword ? 12 : 9}>
                 <Typography
                   variant='h6'
                   component='h2'
@@ -186,53 +196,35 @@ function HomeScreen() {
                   </Grid>
                 )}
               </Grid>
-              {!keyword && (
+              {!isKeywordExists && (
                 <Grid item xs={12} md={3}>
                   <Box
                     className='my-5'
                     style={{
-                      height: '1500px',
                       padding: '10px',
-                      overflowY: 'auto',
+                      overflowY: 'visible',
                       scrollbarWidth: 'thin',
                       scrollbarColor: '#888888 #f2f2f2',
                     }}>
-                    <style>
-                      {`
-                      ::-webkit-scrollbar {
-                        width: 8px;
-                      }
-
-                      ::-webkit-scrollbar-thumb {
-                        background-color: #888888;
-                        border-radius: 4px;
-                      }
-
-                      ::-webkit-scrollbar-thumb:hover {
-                        background-color: #555555;
-                      }
-
-                      ::-webkit-scrollbar-track {
-                        background-color: #f2f2f2;
-                      }
-                    `}
-                    </style>
-
                     <Typography
                       variant='h6'
                       component='h3'
                       color='primary'
                       fontWeight='bold'
                       marginBottom='1rem'>
-                      Posts
+                      Stores
                     </Typography>
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {posts.slice(0, 4).map((post) => (
-                        <div key={post._id} className='mb-3'>
-                          <Post post={post} />
-                        </div>
-                      ))}
+                      <Slider {...settings}>
+                        {stores.slice(0, 4).map((store) => (
+                          <div key={store._id} className='mb-3'>
+                            <Store store={store} />
+                          </div>
+                        ))}
+                      </Slider>
                     </div>
+
                     <div
                       style={{
                         display: 'flex',
@@ -242,8 +234,54 @@ function HomeScreen() {
                       <RouterLink to='/posts'>
                         <Button
                           variant='contained'
-                          color='primary'
-                          className='mt-auto'>
+                          color='success'
+                          className='mt-auto'
+                          style={{ textTransform: 'none' }}>
+                          Show All
+                        </Button>
+                      </RouterLink>
+                    </div>
+                  </Box>
+
+                  <Box
+                    className='my-5'
+                    style={{
+                      padding: '10px',
+                      overflowY: 'visible',
+                      scrollbarWidth: 'thin',
+                      scrollbarColor: '#888888 #f2f2f2',
+                    }}>
+                    <Typography
+                      variant='h6'
+                      component='h3'
+                      color='primary'
+                      fontWeight='bold'
+                      marginBottom='1rem'>
+                      Posts
+                    </Typography>
+
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Slider {...settings}>
+                        {posts.slice(0, 4).map((post) => (
+                          <div key={post._id} className='mb-3'>
+                            <Post post={post} />
+                          </div>
+                        ))}
+                      </Slider>
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: 'auto',
+                      }}>
+                      <RouterLink to='/posts'>
+                        <Button
+                          variant='contained'
+                          color='success'
+                          className='mt-auto'
+                          style={{ textTransform: 'none' }}>
                           Continue Reading
                         </Button>
                       </RouterLink>

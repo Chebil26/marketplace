@@ -11,6 +11,8 @@ import {
   Menu,
   Box,
 } from '@mui/material';
+import { SupervisorAccount } from '@mui/icons-material';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { logout } from '../actions/userActions';
@@ -144,6 +146,14 @@ function Header() {
             </StyledLink>
             <SearchBox />
             {userInfo && userInfo.isAdmin && (
+              <Box padding={2}>
+                <StyledLink to='/admin'>
+                  <SupervisorAccount />
+                  <StyledButton color='inherit'>Admin Panel</StyledButton>
+                </StyledLink>
+              </Box>
+            )}
+            {/* {userInfo && userInfo.isAdmin && (
               <div>
                 <StyledLink to='/admin/productlist'>
                   <StyledButton color='inherit'>My Products</StyledButton>
@@ -161,7 +171,7 @@ function Header() {
                   <i className='fas fa-plus'></i> Create
                 </StyledButton>
               </div>
-            )}
+            )} */}
           </Toolbar>
         </Container>
       </StyledAppBar>

@@ -39,7 +39,7 @@ function Product({ product, authorHandler }) {
         </div>
       </Link>
       <CardContent className='p-0'>
-        <Link authorHandler>
+        <Link to={`/product/${product._id}`}>
           <Typography
             variant='subtitle1'
             component='p'

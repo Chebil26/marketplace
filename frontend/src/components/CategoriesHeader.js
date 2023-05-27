@@ -72,6 +72,7 @@ function CategoriesHeader({ categories, filterHandler, clearHandler }) {
                       marginRight: '10px',
                       textDecoration: 'none',
                       cursor: 'pointer',
+                      textTransform: 'none',
                     }}
                     onClick={() => filterHandler(category)}>
                     {category}

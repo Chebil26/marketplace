@@ -20,6 +20,8 @@ import UserProfileScreen from './screens/UserProfileScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 
+import AdminScreen from './screens/AdminScreen';
+
 import StoresScreen from './screens/StoresScreen';
 import StoreDetailScreen from './screens/StoresDetailScreen';
 import StoreContactScreen from './screens/StoreContactScreen';
@@ -59,6 +61,7 @@ function App() {
                   path='/admin/product/edit/:id/'
                   Component={ProductEditScreen}
                 />
+                <Route path='/admin' Component={AdminScreen} />
 
                 <Route path='/stores' Component={StoresScreen} />
                 <Route path='/stores/:id' Component={StoreDetailScreen} />

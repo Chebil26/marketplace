@@ -154,9 +154,6 @@ const ProductScreen = ({ match }) => {
                 <Typography variant='h6' component='div' sx={{ mb: 2 }}>
                   Categories:
                 </Typography>
-                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
-                  Categories:
-                </Typography>
                 <Box sx={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {product.category &&
                     product.category.split(',').map((category) => (

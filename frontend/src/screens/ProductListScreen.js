@@ -92,7 +92,7 @@ function ProductListScreen({ match }) {
     dispatch(createProduct());
   };
 
-  console.log(store);
+  console.log(storeProducts);
 
   return (
     <div>

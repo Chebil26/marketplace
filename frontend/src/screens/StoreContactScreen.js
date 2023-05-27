@@ -1,24 +1,12 @@
 import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  ListGroup,
-} from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
+  faEnvelope,
   faMapMarkerAlt,
   faPhoneAlt,
-  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { listStoreDetails } from '../actions/storeActions';
-import { listProducts } from '../actions/productActions';
-import Product from '../components/Product';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import StoreHeader from '../components/StoreHeader';
 
 const StoreContactScreen = () => {

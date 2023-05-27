@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Row, Col, Card, ListGroup } from 'react-bootstrap';
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Divider,
+  CardMedia,
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listStoreDetails } from '../actions/storeActions';
@@ -8,7 +16,7 @@ import { listProducts } from '../actions/productActions';
 import Product from '../components/Product';
 import StoreHeader from '../components/StoreHeader';
 
-function StoreDetailScreen(props) {
+function StoreDetailScreen() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -31,40 +39,63 @@ function StoreDetailScreen(props) {
     (product) => product.store === store.name
   );
 
-  if (!store) {
+  if (loading || loadingProducts || !store) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
       <StoreHeader />
-      <Card md={3} className='my-3 p-3 rounded' style={{ width: '30rem' }}>
-        <Card.Title as='h1'>
-          <strong>{store.name}</strong>
-        </Card.Title>
-        <Card.Title as='h4'>
-          <strong>from {store.wilaya}</strong>
-        </Card.Title>
-      </Card>
-      <Row className='my-3'>
-        <Col md={8}>
+      <Box my={3} p={3} borderRadius={4} boxShadow={1} maxWidth={600}>
+        <Box display='flex' alignItems='center'>
+          {store.image && (
+            <CardMedia
+              component='img'
+              src={`${process.env.REACT_APP_API_SERVER}${store.image}`}
+              alt={store.name}
+              sx={{ width: 200, height: 200, borderRadius: '50%', mr: 2 }}
+            />
+          )}
+          <div>
+            <Typography variant='h4' component='h1' color='primary'>
+              <strong>{store.name}</strong>
+            </Typography>
+            <Typography variant='h6' component='h4'>
+              <strong>from {store.wilaya}</strong>
+            </Typography>
+          </div>
+        </Box>
+      </Box>
+      <Grid container spacing={3}>
+        <Grid item md={8}>
           <Card>
-            <Card.Header>Description</Card.Header>
-            <Card.Body>
-              <Card.Text>{store.description}</Card.Text>
-            </Card.Body>
+            <CardContent>
+              <Typography variant='h6' component='h6' color='primary'>
+                Description
+              </Typography>
+              <Typography variant='body1'>{store.description}</Typography>
+            </CardContent>
           </Card>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
-      <Row>
-        <h4>{store.name}'s Products</h4>
-        {storeProducts.map((product) => (
-          <Col key={product._id} sm={5} md={4} lg={4} xl={3}>
-            <Product product={product} />
-          </Col>
-        ))}
-      </Row>
+      <Box my={3}>
+        <Typography
+          variant='h4'
+          component='h4'
+          color='primary'
+          marginBottom={2}>
+          {store.name}'s Products
+        </Typography>
+        <Divider />
+        <Grid container spacing={3}>
+          {storeProducts.map((product) => (
+            <Grid item key={product._id} xs={12} sm={6} md={4} lg={3} xl={3}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </div>
   );
 }
