@@ -56,6 +56,12 @@ function ProductListScreen({ match }) {
       );
     });
 
+  // products.slice(52500, 52506).map((product) => {
+  //   console.log(product.name);
+  // });
+
+  console.log(products.slice(52500, 52507));
+
   /* eslint-disable no-restricted-globals */
   let keyword = location.search;
   /* eslint-enable no-restricted-globals */

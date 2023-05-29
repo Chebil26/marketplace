@@ -30,6 +30,7 @@ import StoreBlogScreen from './screens/StoreBlogScreen';
 import PostsListScreen from './screens/PostsListScreen';
 import PostCreateScreen from './screens/PostCreateScreen';
 import PostDetailScreen from './screens/PostDetailScreen';
+import AdminOrdersListScreen from './screens/AdminOrdersListScreen';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
                   path='/admin/product/edit/:id/'
                   Component={ProductEditScreen}
                 />
+                <Route path='/admin/orders' Component={AdminOrdersListScreen} />
                 <Route path='/admin' Component={AdminScreen} />
 
                 <Route path='/stores' Component={StoresScreen} />

@@ -31,6 +31,7 @@ import Message from '../components/Message';
 import Rating from '../components/Rating';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import { getBookRecommendations } from '../actions/recommendationActions';
+import { createOrder } from '../actions/orderActions';
 
 const ProductScreen = ({ match }) => {
   const [rating, setRating] = useState(0);
@@ -90,6 +91,16 @@ const ProductScreen = ({ match }) => {
     navigate(`/cart/${id}`);
   };
 
+  const handleCreateOrder = () => {
+    // Create the order by dispatching the action
+    const orderData = {
+      product: product._id, // or the appropriate identifier for the product
+      store: product.store_id,
+      user: userInfo.id, // or the appropriate identifier for the store
+      // Add other necessary data for the order
+    };
+    dispatch(createOrder(orderData));
+  };
   return (
     <Container>
       <Button
@@ -202,8 +213,27 @@ const ProductScreen = ({ match }) => {
                   // disabled={!product.available}
                   fullWidth
                   sx={{ mt: 2 }}>
-                  Add to Cart
+                  add to your booklist
                 </Button>
+
+                {userInfo ? (
+                  <Button
+                    variant='contained'
+                    color='success'
+                    size='large'
+                    onClick={handleCreateOrder}
+                    fullWidth
+                    sx={{ mt: 2 }}>
+                    Place Order
+                  </Button>
+                ) : (
+                  <Box sx={{ padding: '16px' }}>
+                    <Message variant='info'>
+                      Please <Link to='/login'>sign in</Link> to create an
+                      order.
+                    </Message>
+                  </Box>
+                )}
               </CardContent>
             </Card>
             {recommendations && Object.keys(recommendations).length > 0 && (

@@ -4,6 +4,7 @@ from .models import *
 admin.site.register(Product)
 admin.site.register(Review)
 admin.site.register(Store)
+admin.site.register(Order)
 
 admin.site.register(Challenge)
 admin.site.register(ChallengeType)

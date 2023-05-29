@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Challenge, Product, Store, Review,ChallengeType
+from .models import Challenge, Product, Store, Review,ChallengeType, Order
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -90,3 +90,26 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+    
+    
+
+class OrderSerializer(serializers.ModelSerializer):
+    store = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Store.objects.all()
+    )
+    store_id = serializers.PrimaryKeyRelatedField(source='store', read_only=True)
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.none()
+    )
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     request = self.context.get('request')
+    #     if request and 'store' in request.data:
+    #         store_id = request.data['store']
+    #         self.fields['product'].queryset = Product.objects.filter(store_id=store_id)
+
+    class Meta:
+        model = Order
+        fields = '__all__'

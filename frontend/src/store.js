@@ -1,98 +1,127 @@
-import { createStore, combineReducers, applyMiddleware} from 'redux'
-import {configureStore} from "@reduxjs/toolkit"
-import thunk from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import { ProductListReducer, productDetailsReducer,
-    productDeleteReducer, productCreateReducer,
-    productUpdateReducer, productTopRatedReducer,
-    productReviewCreateReducer} from './reducers/productReducers'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+  ProductListReducer,
+  productDetailsReducer,
+  productDeleteReducer,
+  productCreateReducer,
+  productUpdateReducer,
+  productTopRatedReducer,
+  productReviewCreateReducer,
+} from './reducers/productReducers';
 
-import { bookRecommendationsReducer } from './reducers/recommendationReducers'
-import { cartReducer } from './reducers/cartReducers'
+import {
+  orderCreateReducer,
+  orderListReducer,
+  orderDetailsReducer,
+} from './reducers/orderReducers';
 
-import { userLoginReducer,
-    userRegisterReducer,
-    userDetailsReducer,
-    userUpdateProfileReducer
- } from './reducers/userReducers'
+import { bookRecommendationsReducer } from './reducers/recommendationReducers';
+import { cartReducer } from './reducers/cartReducers';
 
-import { storeListReducer, storeDetailsReducer, storeByUserReducer } from './reducers/storeReducers'
+import {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdateProfileReducer,
+} from './reducers/userReducers';
 
-import { readingChallengeCreateReducer, readingChallengeUpdateReducer,readingChallengeDetailsReducer, readingChallengeIncrementReducer } from './reducers/challengeReducers'
+import {
+  storeListReducer,
+  storeDetailsReducer,
+  storeByUserReducer,
+} from './reducers/storeReducers';
 
-import counterReducer from './features/counterSlice'
-import postReducer from './features/postSlice'
+import {
+  readingChallengeCreateReducer,
+  readingChallengeUpdateReducer,
+  readingChallengeDetailsReducer,
+  readingChallengeIncrementReducer,
+} from './reducers/challengeReducers';
 
-import { postCreateReducer, postUpdateReducer, postDetailsReducer, commentCreateReducer, commentListReducer } from './reducers/blogReducers'
+import counterReducer from './features/counterSlice';
+import postReducer from './features/postSlice';
+
+import {
+  postCreateReducer,
+  postUpdateReducer,
+  postDetailsReducer,
+  commentCreateReducer,
+  commentListReducer,
+} from './reducers/blogReducers';
 
 const reducer = combineReducers({
-    productList: ProductListReducer,
-    productDetails: productDetailsReducer,
-    productDelete: productDeleteReducer,
-    productCreate: productCreateReducer,
-    productUpdate: productUpdateReducer,
-    productTopRated: productTopRatedReducer,
-    productReviewCreate: productReviewCreateReducer,
+  productList: ProductListReducer,
+  productDetails: productDetailsReducer,
+  productDelete: productDeleteReducer,
+  productCreate: productCreateReducer,
+  productUpdate: productUpdateReducer,
+  productTopRated: productTopRatedReducer,
+  productReviewCreate: productReviewCreateReducer,
 
-    bookRecommendations: bookRecommendationsReducer,
+  orderCreate: orderCreateReducer,
+  orderList: orderListReducer,
+  orderDetails: orderDetailsReducer,
 
-    storeList: storeListReducer,
-    storeDetails: storeDetailsReducer,
-    storeByUser: storeByUserReducer,
+  bookRecommendations: bookRecommendationsReducer,
 
-    cart: cartReducer,
+  storeList: storeListReducer,
+  storeDetails: storeDetailsReducer,
+  storeByUser: storeByUserReducer,
 
-    userLogin:userLoginReducer,
-    userRegister:userRegisterReducer,
-    userDetails:userDetailsReducer,
-    userUpdateProfile:userUpdateProfileReducer,
+  cart: cartReducer,
 
-    readingChallengeDetails: readingChallengeDetailsReducer,
-    readingChallengeCreate: readingChallengeCreateReducer,
-    readingChallengeUpdate: readingChallengeUpdateReducer,
-    readingChallengeIncrement: readingChallengeIncrementReducer,
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer,
 
-    counter: counterReducer,
+  readingChallengeDetails: readingChallengeDetailsReducer,
+  readingChallengeCreate: readingChallengeCreateReducer,
+  readingChallengeUpdate: readingChallengeUpdateReducer,
+  readingChallengeIncrement: readingChallengeIncrementReducer,
 
-    post: postReducer,
+  counter: counterReducer,
 
-    postCreate: postCreateReducer,
-    postDetails: postDetailsReducer,
-    postUpdate: postUpdateReducer,
-    commentCreate: commentCreateReducer,
-    commentList: commentListReducer,
+  post: postReducer,
 
-})
+  postCreate: postCreateReducer,
+  postDetails: postDetailsReducer,
+  postUpdate: postUpdateReducer,
+  commentCreate: commentCreateReducer,
+  commentList: commentListReducer,
+});
 
-const cartItemsFromStorage = localStorage.getItem('cartItems') ? 
-    JSON.parse(localStorage.getItem('cartItems')) : []
+const cartItemsFromStorage = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems'))
+  : [];
 
-const userInfoFromStorage = localStorage.getItem('userInfo') ? 
-    JSON.parse(localStorage.getItem('userInfo')) : null
-
-
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null;
 
 const initialState = {
-    cart:{cartItems: cartItemsFromStorage},
-    userLogin:{userInfo: userInfoFromStorage}
-} 
+  cart: { cartItems: cartItemsFromStorage },
+  userLogin: { userInfo: userInfoFromStorage },
+};
 
 const preloadedState = {
-    cart: { cartItems: cartItemsFromStorage },
-    userLogin: { userInfo: userInfoFromStorage },
-  };
+  cart: { cartItems: cartItemsFromStorage },
+  userLogin: { userInfo: userInfoFromStorage },
+};
 
-const middleware = [thunk]
+const middleware = [thunk];
 
 // const store = createStore(reducer, initialState,
 //     composeWithDevTools(applyMiddleware(...middleware)))
 
 const store = configureStore({
-    reducer,
-    middleware,
-    devTools: true,
-    preloadedState,
-  })
+  reducer,
+  middleware,
+  devTools: true,
+  preloadedState,
+});
 
-
-export default store
+export default store;

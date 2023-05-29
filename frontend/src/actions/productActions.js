@@ -29,7 +29,6 @@ export const listProducts =
   async (dispatch) => {
     try {
       dispatch({ type: PRODCUT_LIST_REQUEST });
-      console.log(keyword);
 
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_SERVER}/api/products${keyword}`

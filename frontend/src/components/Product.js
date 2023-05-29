@@ -34,6 +34,8 @@ function Product({ product, authorHandler }) {
               maxWidth: '100%',
               maxHeight: '100%',
               objectFit: 'cover',
+              width: '100%', // Set the width to 100% to make all images have the same size
+              height: '100%', // Set the height to 100% to make all images have the same size
             }}
           />
         </div>

@@ -61,6 +61,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    isPaid = models.BooleanField(default=False)
+    paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    isDelivered = models.BooleanField(default=False)
+    deliveredAt = models.DateTimeField(
+        auto_now_add=False, null=True, blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Review(models.Model):
