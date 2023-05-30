@@ -82,6 +82,13 @@ const AdminScreen = () => {
           </Link>
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3}>
+          <Link to='/admin/orders' style={{ textDecoration: 'none' }}>
+            <StyledButton variant='contained' color='secondary'>
+              Your Orders
+            </StyledButton>
+          </Link>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <StyledButton
             variant='contained'
             color='success'

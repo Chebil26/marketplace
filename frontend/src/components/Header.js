@@ -27,7 +27,7 @@ const StyledAppBar = styled(AppBar)`
 const StyledLink = styled(Link)`
   color: #fff;
   text-decoration: none;
-  margin-right: 1rem;
+  margin-right: 0.2rem;
 `;
 
 const StyledTypography = styled(Typography)`
@@ -38,7 +38,7 @@ const StyledTypography = styled(Typography)`
 
 const StyledButton = styled(Button)`
   text-transform: none;
-  margin-right: 1rem;
+  margin-right: 0.2rem;
 `;
 
 function Header() {
@@ -96,11 +96,29 @@ function Header() {
                 Adeem
               </StyledTypography>
             </StyledLink>
+
+            <StyledLink to='/stores'>
+              <StyledButton color='inherit'>Stores</StyledButton>
+            </StyledLink>
+            <StyledLink to='/posts'>
+              <StyledButton color='inherit'>Blogs</StyledButton>
+            </StyledLink>
+            <SearchBox />
+            {userInfo && userInfo.isAdmin && (
+              <Box padding={2}>
+                <StyledLink to='/admin'>
+                  <SupervisorAccount />
+                  <StyledButton color='inherit'>Admin Panel</StyledButton>
+                </StyledLink>
+              </Box>
+            )}
+
             <StyledLink to='/cart'>
               <StyledButton color='inherit'>
-                <i className='fas fa-shopping-cart'></i> Saved
+                <i className='fas fa-shopping-cart'></i> My books
               </StyledButton>
             </StyledLink>
+
             {userInfo ? (
               <div>
                 <StyledButton
@@ -137,21 +155,6 @@ function Header() {
                   <i className='fas fa-user'></i> Login
                 </StyledButton>
               </StyledLink>
-            )}
-            <StyledLink to='/stores'>
-              <StyledButton color='inherit'>Stores</StyledButton>
-            </StyledLink>
-            <StyledLink to='/posts'>
-              <StyledButton color='inherit'>Blogs</StyledButton>
-            </StyledLink>
-            <SearchBox />
-            {userInfo && userInfo.isAdmin && (
-              <Box padding={2}>
-                <StyledLink to='/admin'>
-                  <SupervisorAccount />
-                  <StyledButton color='inherit'>Admin Panel</StyledButton>
-                </StyledLink>
-              </Box>
             )}
             {/* {userInfo && userInfo.isAdmin && (
               <div>

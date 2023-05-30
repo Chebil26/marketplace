@@ -102,14 +102,11 @@ class OrderSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.none()
     )
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     request = self.context.get('request')
-    #     if request and 'store' in request.data:
-    #         store_id = request.data['store']
-    #         self.fields['product'].queryset = Product.objects.filter(store_id=store_id)
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = '__all__'
+
+    def get_username(self, obj):
+        return self.context['request'].user.username

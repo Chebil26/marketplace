@@ -17,17 +17,21 @@ function SearchBox() {
   };
 
   return (
-    <form onSubmit={submitHandler} style={{ display: 'flex' }}>
+    <form
+      onSubmit={submitHandler}
+      style={{ display: 'flex', marginLeft: '50px' }}>
       <TextField
         type='search'
         onChange={(e) => setKeyword(e.target.value)}
         placeholder='Explore'
         variant='outlined'
         size='small'
-        style={{
+        sx={{
+          width: '400px',
           borderRadius: '10px',
           marginRight: '8px',
           backgroundColor: 'white',
+          // paddingRight: '10px', // Add padding to the right
         }}
       />
       <Button type='submit' variant='contained' color='success'>

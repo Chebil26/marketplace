@@ -10,16 +10,24 @@ from rest_framework.response import Response
 # class OrderCreateView(generics.CreateAPIView):
 #     queryset = Order.objects.all()
 #     serializer_class = OrderSerializer
-
 @permission_classes([IsAuthenticated])
 class OrderListView(generics.ListAPIView):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        store = Store.objects.get(user=user)  # Assuming each user has only one store
+        return Order.objects.filter(store=store)
+
 
 @permission_classes([IsAuthenticated])
 class OrderDetailView(generics.RetrieveAPIView):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        store = Store.objects.get(user=user)  # Assuming each user has only one store
+        return Order.objects.filter(store=store)
     
     
 @api_view(['POST'])

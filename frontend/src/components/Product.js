@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Rating from './Rating';
 
-function Product({ product, authorHandler }) {
+function Product({ product }) {
   const placeholder = `${process.env.REACT_APP_API_SERVER}/images/book_placeholder.png`;
 
   return (

@@ -143,15 +143,15 @@ function ProfileScreen() {
             <Typography variant='h3' component='h1' gutterBottom>
               {user.name}
             </Typography>
-            <Typography variant='h5' gutterBottom color='primary'>
+            {/* <Typography variant='h5' gutterBottom color='primary'>
               @{user.username}
-            </Typography>
-            <Typography variant='body1' gutterBottom>
+            </Typography> */}
+            {/* <Typography variant='body1' gutterBottom>
               {user.bio}
-            </Typography>
-            <Typography variant='body2' color='textSecondary' gutterBottom>
+            </Typography> */}
+            {/* <Typography variant='body2' color='textSecondary' gutterBottom>
               Location: {user.location}
-            </Typography>
+            </Typography> */}
             <Typography variant='body2' color='textSecondary'>
               Email: {user.email}
             </Typography>

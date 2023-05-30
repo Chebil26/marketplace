@@ -14,6 +14,11 @@ import {
   Select,
   TextField,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Link,
 } from '@mui/material';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -21,7 +26,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   createProductReview,
   listProductDetails,
@@ -36,6 +41,8 @@ import { createOrder } from '../actions/orderActions';
 const ProductScreen = ({ match }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const placeholder = '/images/book_placeholder.png';
 
@@ -92,6 +99,11 @@ const ProductScreen = ({ match }) => {
   };
 
   const handleCreateOrder = () => {
+    setOpenDialog(true);
+  };
+
+  const handleConfirmOrder = () => {
+    setOpenDialog(false);
     // Create the order by dispatching the action
     const orderData = {
       product: product._id, // or the appropriate identifier for the product
@@ -100,7 +112,13 @@ const ProductScreen = ({ match }) => {
       // Add other necessary data for the order
     };
     dispatch(createOrder(orderData));
+    setOrderPlaced(true); // Set the order placement status to true
   };
+
+  const handleCancelOrder = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <Container>
       <Button
@@ -223,8 +241,11 @@ const ProductScreen = ({ match }) => {
                     size='large'
                     onClick={handleCreateOrder}
                     fullWidth
-                    sx={{ mt: 2 }}>
-                    Place Order
+                    sx={{ mt: 2 }}
+                    disabled={orderPlaced} // Disable the button if the order is already placed
+                    style={{ opacity: orderPlaced ? 0.5 : 1 }} // Apply the fade effect
+                  >
+                    {orderPlaced ? 'Order Placed' : 'Place Order'}
                   </Button>
                 ) : (
                   <Box sx={{ padding: '16px' }}>
@@ -353,6 +374,23 @@ const ProductScreen = ({ match }) => {
           </Grid>
         </Grid>
       )}
+
+      <Dialog open={openDialog} onClose={handleCancelOrder}>
+        <DialogTitle>Confirm Order</DialogTitle>
+        <DialogContent>
+          <Typography variant='body1' component='p'>
+            Are you sure you want to place this order?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelOrder} color='inherit'>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmOrder} color='primary'>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

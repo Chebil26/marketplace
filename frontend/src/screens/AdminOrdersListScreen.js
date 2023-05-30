@@ -1,72 +1,93 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-  Box,
-  Container,
-  Typography,
-  TableContainer,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Paper,
-  Button,
+  Typography,
+  CircularProgress,
 } from '@mui/material';
-// import { getStoreOrders } from '../actions/orderActions';
+import { listOrders } from '../actions/orderActions';
 
-function AdminOrdersListScreen() {
+const AdminOrdersListScreen = () => {
   const dispatch = useDispatch();
-  const history = useNavigate();
+  const orderList = useSelector((state) => state.orderList);
+  const { loading, orders, error } = orderList;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  //   const storeOrders = useSelector((state) => state.storeOrders);
-  //   const { loading, orders, error } = storeOrders;
 
-  //   useEffect(() => {
-  //     if (userInfo && userInfo.isStoreOwner) {
-  //       dispatch(getStoreOrders());
-  //     } else {
-  //       history('/login');
-  //     }
-  //   }, [dispatch, userInfo, history]);
-  const orders = {};
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(listOrders());
+    }
+  }, [dispatch, userInfo]);
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    };
+    return new Intl.DateTimeFormat('en-GB', options).format(
+      new Date(dateString)
+    );
+  };
 
   return (
-    <Container>
-      <TableContainer component={Paper}>
-        <TableContainer>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order ID</TableCell>
-              <TableCell>Product</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Total</TableCell>
-            </TableRow>
-          </TableHead>
-          {/* <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order._id}>
-                <TableCell>{order._id}</TableCell>
-                <TableCell>{order.product.name}</TableCell>
-                <TableCell>{order.product.price} DA</TableCell>
-                <TableCell>{order.quantity}</TableCell>
-                <TableCell>{order.totalPrice} DA</TableCell>
+    <div>
+      <Typography variant='h2' component='h2' gutterBottom>
+        Admin Orders
+      </Typography>
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <Typography variant='body1' color='error'>
+          Error: {error}
+        </Typography>
+      ) : userInfo && userInfo.isAdmin ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>User</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Paid</TableCell>
+                <TableCell>Delivered</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody> */}
+            </TableHead>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell>{order.username}</TableCell>
+                  <TableCell>{formatDate(order.created_at)}</TableCell>
+                  <TableCell>{order.isPaid ? 'Paid' : 'Not Paid'}</TableCell>
+                  <TableCell>
+                    {order.isDelivered ? 'Delivered' : 'Not Delivered'}
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/admin/orders/${order.id}`}>Details</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </TableContainer>
-      </TableContainer>
-
-      <Box sx={{ marginTop: '2rem' }}>
-        <Button variant='contained' onClick={() => history.push('/')} fullWidth>
-          Go Back
-        </Button>
-      </Box>
-    </Container>
+      ) : (
+        <Typography variant='body1' color='textSecondary'>
+          You are not authorized to view this page.
+        </Typography>
+      )}
+    </div>
   );
-}
+};
 
 export default AdminOrdersListScreen;
