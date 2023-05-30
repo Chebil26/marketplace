@@ -83,6 +83,7 @@ function HomeScreen() {
     'Romance',
     'Biography',
     'Self Help',
+    'Classics',
   ];
 
   const authorHandler = (author) => {

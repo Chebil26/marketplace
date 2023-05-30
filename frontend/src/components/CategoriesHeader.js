@@ -1,85 +1,77 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppBar, Toolbar, Button, Container, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  makeStyles,
+  Collapse,
+} from '@mui/material';
+import React, { useState } from 'react';
 
-import { LinkContainer } from 'react-router-bootstrap';
-
-import SearchBox from './SearchBox';
-import { logout } from '../actions/userActions';
-import { createProduct } from '../actions/productActions';
-import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
+const useStyles = makeStyles((theme) => ({
+  toolbar: {
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+  },
+  categoryButton: {
+    marginRight: '10px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    textTransform: 'none',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 5px 10px 5px',
+    },
+  },
+  separator: {
+    margin: '0 5px',
+    borderLeft: '1px solid black',
+    height: '14px',
+    display: 'inline-block',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+}));
 
 function CategoriesHeader({ categories, filterHandler, clearHandler }) {
-  const history = useNavigate();
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const classes = useStyles();
+  const [collapsed, setCollapsed] = useState(true);
 
-  const productCreate = useSelector((state) => state.productCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdProduct,
-  } = productCreate;
-
-  const storeByUser = useSelector((state) => state.storeByUser);
-  const { store } = storeByUser;
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    if (successCreate) {
-      history(`/admin/product/edit/${createdProduct._id}/`);
-    }
-  }, [dispatch, history, successCreate, createdProduct]);
-
-  const logoutHandler = () => {
-    dispatch(logout());
-    history('/');
-  };
-
-  const createProductHandler = (product) => {
-    dispatch(createProduct());
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
   };
 
   return (
     <header>
-      <AppBar
-        position='static'
-        color='default'
-        style={{ width: '100%', height: 55 }}>
+      <AppBar position='static' color='default'>
         <Toolbar>
           <Container maxWidth='lg'>
-            <nav>
+            <Box className={classes.toolbar}>
               {categories.map((category, index) => (
                 <React.Fragment key={category}>
-                  {index !== 0 && (
-                    <span
-                      style={{
-                        margin: '0 5px',
-                        borderLeft: '1px solid black',
-                        height: '14px',
-                        display: 'inline-block',
-                      }}></span>
-                  )}
-                  <Button
-                    variant='text'
-                    color='inherit'
-                    style={{
-                      marginRight: '10px',
-                      textDecoration: 'none',
-                      cursor: 'pointer',
-                      textTransform: 'none',
-                    }}
-                    onClick={() => filterHandler(category)}>
-                    {category}
-                  </Button>
+                  {index !== 0 && <span className={classes.separator}></span>}
+                  <Collapse in={!collapsed} timeout='auto' unmountOnExit>
+                    <Button
+                      variant='text'
+                      color='inherit'
+                      className={classes.categoryButton}
+                      onClick={() => filterHandler(category)}>
+                      {category}
+                    </Button>
+                  </Collapse>
                 </React.Fragment>
               ))}
-            </nav>
+              {categories.length > 1 && (
+                <Button variant='text' color='inherit' onClick={toggleCollapse}>
+                  {collapsed ? 'Expand' : 'Collapse'}
+                </Button>
+              )}
+            </Box>
           </Container>
         </Toolbar>
       </AppBar>

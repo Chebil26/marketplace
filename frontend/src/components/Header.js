@@ -12,6 +12,11 @@ import {
   Box,
 } from '@mui/material';
 import { SupervisorAccount } from '@mui/icons-material';
+import StoreIcon from '@mui/icons-material/Store';
+import FeedIcon from '@mui/icons-material/Feed';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import Person2Icon from '@mui/icons-material/Person2';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -23,10 +28,11 @@ import SearchBox from './SearchBox';
 const StyledAppBar = styled(AppBar)`
   background-color: #185b89;
 `;
-
 const StyledLink = styled(Link)`
   color: #fff;
   text-decoration: none;
+  display: flex;
+  align-items: center;
   margin-right: 0.2rem;
 `;
 
@@ -98,26 +104,37 @@ function Header() {
             </StyledLink>
 
             <StyledLink to='/stores'>
-              <StyledButton color='inherit'>Stores</StyledButton>
+              <StyledButton color='inherit'>
+                <StoreIcon />
+                Stores
+              </StyledButton>
             </StyledLink>
+
             <StyledLink to='/posts'>
-              <StyledButton color='inherit'>Blogs</StyledButton>
+              <StyledButton color='inherit'>
+                <FeedIcon />
+                Blogs
+              </StyledButton>
             </StyledLink>
+
+            <StyledLink to='/cart'>
+              <StyledButton color='inherit'>
+                <BookmarksIcon />
+                My books
+              </StyledButton>
+            </StyledLink>
+
             <SearchBox />
             {userInfo && userInfo.isAdmin && (
               <Box padding={2}>
                 <StyledLink to='/admin'>
-                  <SupervisorAccount />
-                  <StyledButton color='inherit'>Admin Panel</StyledButton>
+                  <StyledButton color='inherit'>
+                    <SupervisorAccount />
+                    Admin Panel
+                  </StyledButton>
                 </StyledLink>
               </Box>
             )}
-
-            <StyledLink to='/cart'>
-              <StyledButton color='inherit'>
-                <i className='fas fa-shopping-cart'></i> My books
-              </StyledButton>
-            </StyledLink>
 
             {userInfo ? (
               <div>
@@ -125,6 +142,7 @@ function Header() {
                   color='inherit'
                   onClick={handleClick}
                   endIcon={<i className='fas fa-caret-down'></i>}>
+                  <Person2Icon />
                   {userInfo.name}
                 </StyledButton>
                 <Menu
@@ -146,35 +164,18 @@ function Header() {
                     onClick={handleClose}>
                     <i className='fas fa-user'></i> Profile
                   </MenuItem>
-                  <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                  <MenuItem onClick={logoutHandler}>
+                    <LogoutIcon /> Logout
+                  </MenuItem>
                 </Menu>
               </div>
             ) : (
               <StyledLink to='/login'>
-                <StyledButton color='inherit'>
+                <StyledButton color='inherit' style={{ marginLeft: '6rem' }}>
                   <i className='fas fa-user'></i> Login
                 </StyledButton>
               </StyledLink>
             )}
-            {/* {userInfo && userInfo.isAdmin && (
-              <div>
-                <StyledLink to='/admin/productlist'>
-                  <StyledButton color='inherit'>My Products</StyledButton>
-                </StyledLink>
-                <StyledLink to='/blog'>
-                  <StyledButton color='inherit'>My Blog</StyledButton>
-                </StyledLink>
-                <StyledLink to={`/stores/${store.id}`}>
-                  <StyledButton color='inherit'>{store.name}</StyledButton>
-                </StyledLink>
-                <StyledButton
-                  variant='contained'
-                  color='success'
-                  onClick={createProductHandler}>
-                  <i className='fas fa-plus'></i> Create
-                </StyledButton>
-              </div>
-            )} */}
           </Toolbar>
         </Container>
       </StyledAppBar>

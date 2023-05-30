@@ -27,9 +27,9 @@ function SearchBox() {
         variant='outlined'
         size='small'
         sx={{
-          width: '400px',
+          width: '320px',
           borderRadius: '10px',
-          marginRight: '8px',
+          marginRight: '4px',
           backgroundColor: 'white',
           // paddingRight: '10px', // Add padding to the right
         }}
