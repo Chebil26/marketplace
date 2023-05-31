@@ -111,7 +111,7 @@ function HomeScreen() {
   };
 
   return (
-    <>
+    <Box>
       <CategoriesHeader
         categories={categories}
         filterHandler={filterHandler}
@@ -305,7 +305,7 @@ function HomeScreen() {
       </Box>
 
       <Paginate page={page} pages={pages} keyword={keyword} />
-    </>
+    </Box>
   );
 }
 

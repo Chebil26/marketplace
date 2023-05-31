@@ -260,7 +260,7 @@ const ProductScreen = ({ match }) => {
             {recommendations && Object.keys(recommendations).length > 0 && (
               <Box sx={{ mt: 2 }}>
                 <Typography variant='h6' component='div' sx={{ mb: 2 }}>
-                  Recommended Books
+                  You might also like
                 </Typography>
                 <Slider
                   arrows={true}
@@ -268,7 +268,9 @@ const ProductScreen = ({ match }) => {
                   swipe={true}
                   infinite={true}
                   slidesToShow={2}
-                  slidesToScroll={1}>
+                  slidesToScroll={1}
+                  autoplay={true} // Add this line
+                >
                   {Object.keys(recommendations).map((bookTitle) => {
                     const book = recommendations[bookTitle];
                     return (
