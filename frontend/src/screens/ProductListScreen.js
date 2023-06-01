@@ -1,30 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Col, Form, Row, Table } from 'react-bootstrap';
+import {
+  Button,
+  Chip,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import {
   createProduct,
   deleteProduct,
-  listProducts,
+  getProductsByStore,
 } from '../actions/productActions';
 import { listStoreByUser } from '../actions/storeActions';
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
+import Paginate from '../components/Paginate';
 
-function ProductListScreen({ match }) {
-  let history = useNavigate();
-  const [skeyword, setSkeyword] = useState('');
+const ProductListScreen = ({ match }) => {
+  const history = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const dispatch = useDispatch();
 
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products, pages, page } = productList;
+  const productByStore = useSelector((state) => state.productByStore);
+  const { loading, error, products, pages, page } = productByStore;
 
   const productDelete = useSelector((state) => state.productDelete);
   const {
-    loading: lodaingDelete,
+    loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
   } = productDelete;
@@ -43,28 +58,19 @@ function ProductListScreen({ match }) {
   const storeByUser = useSelector((state) => state.storeByUser);
   const { loading: loadingStore, error: errorStore, store } = storeByUser;
 
-  // const storeProducts = products.filter(product => product.store === store.name);
   const storeProducts = products
     .filter((product) => product.store === store.name)
     .filter((product) => {
       const { name, author, isbn, publisher } = product;
       return (
-        (name?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
-        (author?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
-        (isbn?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false) ||
-        (publisher?.toLowerCase()?.includes(skeyword.toLowerCase()) ?? false)
+        (name?.toLowerCase()?.includes(searchKeyword.toLowerCase()) ?? false) ||
+        (author?.toLowerCase()?.includes(searchKeyword.toLowerCase()) ??
+          false) ||
+        (isbn?.toLowerCase()?.includes(searchKeyword.toLowerCase()) ?? false) ||
+        (publisher?.toLowerCase()?.includes(searchKeyword.toLowerCase()) ??
+          false)
       );
     });
-
-  // products.slice(52500, 52506).map((product) => {
-  //   console.log(product.name);
-  // });
-
-  console.log(products.slice(52500, 52507));
-
-  /* eslint-disable no-restricted-globals */
-  let keyword = location.search;
-  /* eslint-enable no-restricted-globals */
 
   useEffect(() => {
     dispatch({ type: PRODUCT_CREATE_RESET });
@@ -75,13 +81,12 @@ function ProductListScreen({ match }) {
     if (successCreate) {
       history(`/admin/product/edit/${createdProduct._id}/`);
     } else {
-      dispatch(listProducts());
+      dispatch(getProductsByStore(store.id));
       dispatch(listStoreByUser());
     }
   }, [
     dispatch,
     history,
-    keyword,
     userInfo,
     successDelete,
     successCreate,
@@ -94,34 +99,44 @@ function ProductListScreen({ match }) {
     }
   };
 
-  const createProductHandler = (product) => {
+  const createProductHandler = () => {
     dispatch(createProduct());
   };
 
-  console.log(storeProducts);
-
   return (
     <div>
-      <Row className='align-items-center'>
-        <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col className='text-right'>
-          <Button className='my-3' onClick={createProductHandler}>
-            <i className='fas fa-plus'></i> Create Product
-          </Button>
-        </Col>
-        <Form.Control
+      <Typography variant='h4' gutterBottom>
+        Products
+      </Typography>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={createProductHandler}
+        style={{ marginBottom: '1rem' }}>
+        Create Product
+      </Button>
+      <FormControl
+        variant='outlined'
+        fullWidth
+        style={{ marginBottom: '1rem' }}>
+        <InputLabel htmlFor='search-products'>Search products</InputLabel>
+        <OutlinedInput
+          id='search-products'
           type='text'
-          placeholder='Search products'
-          onChange={(e) => setSkeyword(e.target.value)}
-          // size='lg'
-          disabled={loading}
-          isInvalid={!!error}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          label='Search products'
+          endAdornment={
+            <InputAdornment position='end'>
+              {/* You can add a search icon here if desired */}
+              {/* <IconButton edge="end" aria-label="search">
+                <SearchIcon />
+              </IconButton> */}
+            </InputAdornment>
+          }
         />
-      </Row>
+      </FormControl>
 
-      {lodaingDelete && <Loader />}
+      {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
 
       {loadingCreate && <Loader />}
@@ -132,58 +147,53 @@ function ProductListScreen({ match }) {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <div>
-          <Table striped bordered hover responsive className='table-sm'>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>STOCK</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody>
+        <TableContainer>
+          <Table striped bordered hover>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>Stock</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {storeProducts.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.price}DA</td>
-                  <td>{product.category}</td>
-
-                  <td>
+                <TableRow key={product._id}>
+                  <TableCell>{product._id}</TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.price}DA</TableCell>
+                  <TableCell>{product.category}</TableCell>
+                  <TableCell>
                     {product.available ? (
-                      <Badge className='badge bg-success'>in stock</Badge>
+                      <Chip label='In Stock' color='success' />
                     ) : (
-                      <Badge className='badge bg-danger'>out of stock</Badge>
+                      <Chip label='Out of Stock' color='error' />
                     )}
-                  </td>
-
-                  <td>
-                    <LinkContainer to={`/admin/product/edit/${product._id}/`}>
-                      <Button variant='light' className='btn-sm'>
-                        Edit <i className='fas fa-edit'></i>
-                      </Button>
-                    </LinkContainer>
-
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      to={`/admin/product/edit/${product._id}`}
+                      className='btn btn-light btn-sm'>
+                      Edit <i className='fas fa-edit'></i>
+                    </Link>
                     <Button
                       variant='danger'
                       className='btn-sm'
                       onClick={() => deleteHandler(product._id)}>
                       <i className='fas fa-trash'></i>
                     </Button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
+            </TableBody>
           </Table>
-          {/* <Paginate page={pages} pages={pages} isAdmin={true}/> */}
-        </div>
+        </TableContainer>
       )}
     </div>
   );
-}
+};
 
 export default ProductListScreen;

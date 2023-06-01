@@ -125,7 +125,7 @@ function HomeScreen() {
                 <img
                   src='https://i.postimg.cc/FRz8M1Rh/9066-1.jpg'
                   alt='Banner'
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: '100%', height: 'auto' }}
                 />
               </Grid>
             </Grid>

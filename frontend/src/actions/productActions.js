@@ -22,6 +22,9 @@ import {
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
+  PRODUCTS_BY_STORE_REQUEST,
+  PRODUCTS_BY_STORE_SUCCESS,
+  PRODUCTS_BY_STORE_FAIL,
 } from '../constants/productConstants';
 
 export const listProducts =
@@ -244,6 +247,31 @@ export const createProductReview =
         payload:
           error.response && error.response.data.detail
             ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };
+
+export const getProductsByStore =
+  (storeId, keyword = '') =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCTS_BY_STORE_REQUEST });
+
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/api/products/store/${storeId}${keyword}`
+      );
+
+      dispatch({
+        type: PRODUCTS_BY_STORE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCTS_BY_STORE_FAIL,
+        payload:
+          error.response && error.response.data.message.detail
+            ? error.response.data.message.detail
             : error.message,
       });
     }

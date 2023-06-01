@@ -1,37 +1,36 @@
-import { Row, Col, Container } from 'react-bootstrap';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Grid, Container } from '@mui/material';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import Header from './components/Header';
 import Footer from './components/Footer';
-import SideBar from './components/SideBar';
+import Header from './components/Header';
 import HomeScreen from './screens/HomeScreen';
 
-import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
+import ProductScreen from './screens/ProductScreen';
 
-import BooksScreen from './screens/BooksScreen';
 import BookDetailScreen from './screens/BookDetailScreen';
+import BooksScreen from './screens/BooksScreen';
 
 import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 
-import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
+import ProductListScreen from './screens/ProductListScreen';
 
 import AdminScreen from './screens/AdminScreen';
 
-import StoresScreen from './screens/StoresScreen';
-import StoreDetailScreen from './screens/StoresDetailScreen';
-import StoreContactScreen from './screens/StoreContactScreen';
 import StoreBlogScreen from './screens/StoreBlogScreen';
+import StoreContactScreen from './screens/StoreContactScreen';
+import StoreDetailScreen from './screens/StoresDetailScreen';
+import StoresScreen from './screens/StoresScreen';
 
-import PostsListScreen from './screens/PostsListScreen';
+import AdminOrdersListScreen from './screens/AdminOrdersListScreen';
 import PostCreateScreen from './screens/PostCreateScreen';
 import PostDetailScreen from './screens/PostDetailScreen';
-import AdminOrdersListScreen from './screens/AdminOrdersListScreen';
+import PostsListScreen from './screens/PostsListScreen';
 
 const theme = createTheme({
   palette: {
@@ -47,57 +46,55 @@ function App() {
       <div style={{ backgroundColor: theme.palette.background.default }}>
         <Router>
           <Header />
-          <Row>
-            <Col>
-              <main>
-                <Container>
-                  <Routes>
-                    <Route path='/' Component={HomeScreen} exact />
-                    <Route path='/login' Component={LoginScreen} />
-                    <Route path='/register' Component={RegisterScreen} />
-                    <Route path='/profile' Component={ProfileScreen} />
-                    <Route path='/user-profile' Component={UserProfileScreen} />
+          <Grid container>
+            <Grid item xs={12}>
+              <Container>
+                <Routes>
+                  <Route path='/' element={<HomeScreen />} exact />
+                  <Route path='/login' element={<LoginScreen />} />
+                  <Route path='/register' element={<RegisterScreen />} />
+                  <Route path='/profile' element={<ProfileScreen />} />
+                  <Route path='/user-profile' element={<UserProfileScreen />} />
 
-                    <Route path='/product/:id' Component={ProductScreen} />
+                  <Route path='/product/:id' element={<ProductScreen />} />
 
-                    <Route path='/cart/:id?' Component={CartScreen} />
+                  <Route path='/cart/:id?' element={<CartScreen />} />
 
-                    <Route path='/books' Component={BooksScreen} />
-                    <Route path='/books/:id' Component={BookDetailScreen} />
+                  <Route path='/books' element={<BooksScreen />} />
+                  <Route path='/books/:id' element={<BookDetailScreen />} />
 
-                    <Route
-                      path='/admin/productlist'
-                      Component={ProductListScreen}
-                    />
-                    <Route
-                      path='/admin/product/edit/:id/'
-                      Component={ProductEditScreen}
-                    />
-                    <Route
-                      path='/admin/orders'
-                      Component={AdminOrdersListScreen}
-                    />
-                    <Route path='/admin' Component={AdminScreen} />
+                  <Route
+                    path='/admin/productlist'
+                    element={<ProductListScreen />}
+                  />
+                  <Route
+                    path='/admin/product/edit/:id/'
+                    element={<ProductEditScreen />}
+                  />
+                  <Route
+                    path='/admin/orders'
+                    element={<AdminOrdersListScreen />}
+                  />
+                  <Route path='/admin' element={<AdminScreen />} />
 
-                    <Route path='/stores' Component={StoresScreen} />
-                    <Route path='/stores/:id' Component={StoreDetailScreen} />
-                    <Route
-                      path='/stores/:id/contact'
-                      Component={StoreContactScreen}
-                    />
-                    <Route
-                      path='/stores/:id/blog'
-                      Component={StoreBlogScreen}
-                    />
+                  <Route path='/stores' element={<StoresScreen />} />
+                  <Route path='/stores/:id' element={<StoreDetailScreen />} />
+                  <Route
+                    path='/stores/:id/contact'
+                    element={<StoreContactScreen />}
+                  />
+                  <Route
+                    path='/stores/:id/blog'
+                    element={<StoreBlogScreen />}
+                  />
 
-                    <Route path='/posts' Component={PostsListScreen} />
-                    <Route path='/blog' Component={PostCreateScreen} />
-                    <Route path='/posts/:id' Component={PostDetailScreen} />
-                  </Routes>
-                </Container>
-              </main>
-            </Col>
-          </Row>
+                  <Route path='/posts' element={<PostsListScreen />} />
+                  <Route path='/blog' element={<PostCreateScreen />} />
+                  <Route path='/posts/:id' element={<PostDetailScreen />} />
+                </Routes>
+              </Container>
+            </Grid>
+          </Grid>
 
           <Footer />
         </Router>

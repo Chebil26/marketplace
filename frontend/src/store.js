@@ -1,55 +1,55 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   ProductListReducer,
-  productDetailsReducer,
-  productDeleteReducer,
+  productByStoreReducer,
   productCreateReducer,
-  productUpdateReducer,
-  productTopRatedReducer,
+  productDeleteReducer,
+  productDetailsReducer,
   productReviewCreateReducer,
+  productTopRatedReducer,
+  productUpdateReducer,
 } from './reducers/productReducers';
 
 import {
   orderCreateReducer,
-  orderListReducer,
   orderDetailsReducer,
+  orderListReducer,
 } from './reducers/orderReducers';
 
-import { bookRecommendationsReducer } from './reducers/recommendationReducers';
 import { cartReducer } from './reducers/cartReducers';
+import { bookRecommendationsReducer } from './reducers/recommendationReducers';
 
 import {
+  userDetailsReducer,
   userLoginReducer,
   userRegisterReducer,
-  userDetailsReducer,
   userUpdateProfileReducer,
 } from './reducers/userReducers';
 
 import {
-  storeListReducer,
-  storeDetailsReducer,
   storeByUserReducer,
+  storeDetailsReducer,
+  storeListReducer,
 } from './reducers/storeReducers';
 
 import {
   readingChallengeCreateReducer,
-  readingChallengeUpdateReducer,
   readingChallengeDetailsReducer,
   readingChallengeIncrementReducer,
+  readingChallengeUpdateReducer,
 } from './reducers/challengeReducers';
 
 import counterReducer from './features/counterSlice';
 import postReducer from './features/postSlice';
 
 import {
-  postCreateReducer,
-  postUpdateReducer,
-  postDetailsReducer,
   commentCreateReducer,
   commentListReducer,
+  postCreateReducer,
+  postDetailsReducer,
+  postUpdateReducer,
 } from './reducers/blogReducers';
 
 const reducer = combineReducers({
@@ -60,6 +60,7 @@ const reducer = combineReducers({
   productUpdate: productUpdateReducer,
   productTopRated: productTopRatedReducer,
   productReviewCreate: productReviewCreateReducer,
+  productByStore: productByStoreReducer,
 
   orderCreate: orderCreateReducer,
   orderList: orderListReducer,

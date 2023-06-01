@@ -40,14 +40,45 @@ def getProducts(request):
     return Response({'products':serializer.data, 'page':page, 'pages':paginator.num_pages})
 
 @api_view(['GET'])
-def getProductsByStore(request, pk):
-    category = request.GET.get('category')
-    products = Product.objects.filter(store__id__icontains=pk)
-    if category:
-        products = products.filter(category__icontains=category)
-    
+def get_store_products(request, store_id):
+    store = Store.objects.get(id=store_id)
+    products = Product.objects.filter(store=store)
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def getProductsByStore(request, pk):
+    query = request.query_params.get('keyword', '')
+    category = request.query_params.get('category', '')
+
+    products = Product.objects.filter(
+        Q(name__icontains=query) |
+        Q(author__icontains=query) |
+        Q(category__icontains=query) |
+        Q(isbn__icontains=query),
+        store__id__icontains=pk
+    ).order_by('createdAt')
+
+    if category:
+        products = products.filter(category__icontains=category)
+
+    page = request.query_params.get('page')
+    paginator = Paginator(products, 100)
+
+    try: 
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    if page is None:
+        page = 1 
+    else:
+        page = int(page)
+
+    serializer = ProductSerializer(products, many=True)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 
 @api_view(['GET'])
