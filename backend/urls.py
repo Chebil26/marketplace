@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,7 +32,7 @@ urlpatterns = [
     path('api/challenges/' , include('base.urls.challenge_urls')),
     path('api/orders/' , include('base.urls.order_urls')),
     path('api/blogs/' , include('blog.urls')),
-    path('api/recommendation/', include('recommendation.urls')),
+    # path('api/recommendation/', include('recommendation.urls')),
     path('', include('books.urls')),
 ]
 
