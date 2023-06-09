@@ -308,3 +308,346 @@ function ProductEditScreen() {
 }
 
 export default ProductEditScreen;
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { Link, useNavigate, useParams } from 'react-router-dom';
+// import {
+//   Button,
+//   Checkbox,
+//   FormControl,
+//   FormControlLabel,
+//   Grid,
+//   Input,
+//   InputLabel,
+//   MenuItem,
+//   Select,
+//   TextField,
+//   Typography,
+// } from '@mui/material';
+// import { useDispatch, useSelector } from 'react-redux';
+// import Loader from '../components/Loader';
+// import Message from '../components/Message';
+// import FormContainer from '../components/FormContainer';
+// import SelectBook from '../components/SelectBook';
+// import { listProductDetails, updateProduct } from '../actions/productActions';
+// import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
+
+// function ProductEditScreen() {
+//   let history = useNavigate();
+//   const { id } = useParams();
+//   const productId = id;
+
+//   const [name, setName] = useState('');
+//   const [price, setPrice] = useState(0);
+//   const [image, setImage] = useState('');
+//   const [defaultImage, setDefaultImage] = useState(null);
+//   const [language, setLanguage] = useState('');
+//   const [publisher, setPublisher] = useState('');
+//   const [available, setAvailable] = useState('');
+//   const [category, setCategory] = useState('');
+//   const [description, setDescription] = useState('');
+//   const [uploading, setUploading] = useState(false);
+
+//   const [author, setAuthor] = useState('');
+//   const [isbn, setIsbn] = useState('');
+//   const [published_year, setPublished_year] = useState('');
+//   const [num_pages, setNum_pages] = useState('');
+
+//   const [book, setBook] = useState('');
+//   const [book_id, setBook_id] = useState(0);
+
+//   function handleDataFromChild(data) {
+//     setBook(data.value);
+//   }
+
+//   useEffect(() => {
+//     if (book) {
+//       let str = decodeURIComponent(book.cover).substring(14);
+//       let image_link = 'http://' + str;
+//       setBook_id(book.id);
+//       setName(book.title);
+//       setAuthor(book.author);
+//       setIsbn(book.isbn);
+//       setPublished_year(book.published_year);
+//       setNum_pages(book.num_pages);
+//       setDescription(book.description);
+//       setImage(image_link);
+//       setDefaultImage(image_link);
+//       setCategory(book.categories);
+//     }
+//   }, [book]);
+
+//   const dispatch = useDispatch();
+
+//   const productDetails = useSelector((state) => state.productDetails);
+//   const { error, loading, product } = productDetails;
+
+//   const productUpdate = useSelector((state) => state.productUpdate);
+//   const {
+//     error: errorUpdate,
+//     loading: loadingUpdate,
+//     success: successUpdate,
+//   } = productUpdate;
+
+//   useEffect(() => {
+//     if (successUpdate) {
+//       dispatch({ type: PRODUCT_UPDATE_RESET });
+//       history('/admin/productlist');
+//     } else {
+//       if (!product.name || product._id !== Number(productId)) {
+//         dispatch(listProductDetails(productId));
+//       } else {
+//         setName(product.name);
+//         setLanguage(product.language);
+//         setPrice(product.price);
+//         setImage(product.defaultImage);
+//         setPublisher(product.publisher);
+//         setCategory(product.category);
+//         setAvailable(product.available);
+//         setDescription(product.description);
+//       }
+//     }
+//   }, [dispatch, product, productId, history, successUpdate]);
+
+//   const handleCheckboxChange = (e) => {
+//     setAvailable(e.target.checked);
+//   };
+
+//   const submitHandler = (e) => {
+//     e.preventDefault();
+//     dispatch(
+//       updateProduct({
+//         _id: productId,
+//         book_id,
+//         name,
+//         language,
+//         image,
+//         defaultImage,
+//         isbn,
+//         author,
+//         num_pages,
+//         published_year,
+//         publisher,
+//         category,
+//         description,
+//         price,
+//         available,
+//       })
+//     );
+//   };
+
+//   const uploadFileHandler = async (e) => {
+//     const file = e.target.files[0];
+//     const formData = new FormData();
+
+//     formData.append('image', file);
+//     formData.append('product_id', productId);
+
+//     setUploading(true);
+
+//     try {
+//       const config = {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//         },
+//       };
+
+//       const { data } = await axios.post(
+//         `${process.env.REACT_APP_API_SERVER}/api/products/upload/`,
+//         formData,
+//         config
+//       );
+
+//       setImage(data);
+//       setUploading(false);
+//     } catch (error) {
+//       setUploading(false);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <Link to='/admin/productlist'>Go Back</Link>
+//       <SelectBook sendDataToParent={handleDataFromChild} />
+
+//       <FormContainer>
+//         <Typography variant='h5' component='h1' gutterBottom>
+//           Edit Product
+//         </Typography>
+//         {loadingUpdate && <Loader />}
+//         {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+
+//         {loading ? (
+//           <Loader />
+//         ) : error ? (
+//           <Message variant='danger'>{error}</Message>
+//         ) : (
+//           <form onSubmit={submitHandler}>
+//             <Grid container spacing={2}>
+//               <Grid item xs={12} sm={6}>
+//                 <h3>Loaded Data from the Book:</h3>
+//                 <TextField
+//                   id='name'
+//                   label='Name'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={name}
+//                   onChange={(e) => setName(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <TextField
+//                   id='author'
+//                   label='Author'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={author}
+//                   onChange={(e) => setAuthor(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <TextField
+//                   id='isbn'
+//                   label='ISBN'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={isbn}
+//                   onChange={(e) => setIsbn(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <TextField
+//                   id='published_year'
+//                   label='Year'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={published_year}
+//                   onChange={(e) => setPublished_year(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <TextField
+//                   id='description'
+//                   label='Description'
+//                   variant='outlined'
+//                   multiline
+//                   rows={5}
+//                   fullWidth
+//                   value={description}
+//                   onChange={(e) => setDescription(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+//               </Grid>
+
+//               <Grid item xs={12} sm={6}>
+//                 <h3>Your Own Data:</h3>
+//                 <TextField
+//                   id='price'
+//                   label='Price'
+//                   variant='outlined'
+//                   type='number'
+//                   fullWidth
+//                   value={price}
+//                   onChange={(e) => setPrice(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <FormControl
+//                   variant='outlined'
+//                   fullWidth
+//                   sx={{ marginBottom: '1rem' }}>
+//                   <InputLabel id='language-label'>
+//                     Select the language
+//                   </InputLabel>
+//                   <Select
+//                     labelId='language-label'
+//                     id='language'
+//                     value={language}
+//                     onChange={(e) => setLanguage(e.target.value)}
+//                     label='Select the language'>
+//                     <MenuItem value='English'>English</MenuItem>
+//                     <MenuItem value='Spanish'>Spanish</MenuItem>
+//                     <MenuItem value='French'>French</MenuItem>
+//                   </Select>
+//                 </FormControl>
+
+//                 <TextField
+//                   id='publisher'
+//                   label='Publisher'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={publisher}
+//                   onChange={(e) => setPublisher(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <FormControl
+//                   variant='outlined'
+//                   fullWidth
+//                   sx={{ marginBottom: '1rem' }}>
+//                   <InputLabel id='category-label'>
+//                     Select the category
+//                   </InputLabel>
+//                   <Select
+//                     labelId='category-label'
+//                     id='category'
+//                     value={category}
+//                     onChange={(e) => setCategory(e.target.value)}
+//                     label='Select the category'>
+//                     <MenuItem value='Fiction'>Fiction</MenuItem>
+//                     <MenuItem value='Non-fiction'>Non-fiction</MenuItem>
+//                     <MenuItem value='Science'>Science</MenuItem>
+//                   </Select>
+//                 </FormControl>
+
+//                 <FormControlLabel
+//                   control={
+//                     <Checkbox
+//                       checked={available}
+//                       onChange={handleCheckboxChange}
+//                       name='available'
+//                       color='primary'
+//                     />
+//                   }
+//                   label='Available'
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+
+//                 <TextField
+//                   id='image'
+//                   label='Image'
+//                   variant='outlined'
+//                   fullWidth
+//                   value={image}
+//                   onChange={(e) => setImage(e.target.value)}
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 />
+//                 <Button
+//                   variant='contained'
+//                   component='label'
+//                   sx={{ marginBottom: '1rem' }} // Add margin at the bottom
+//                 >
+//                   Upload File
+//                   <Input type='file' hidden onChange={uploadFileHandler} />
+//                 </Button>
+
+//                 {uploading && <Loader />}
+//               </Grid>
+//             </Grid>
+//             <Button
+//               type='submit'
+//               variant='contained'
+//               color='primary'
+//               sx={{ marginTop: '1rem' }} // Add margin at the top
+//             >
+//               Update
+//             </Button>
+//           </form>
+//         )}
+//       </FormContainer>
+//     </div>
+//   );
+// }
+
+// export default ProductEditScreen;

@@ -11,5 +11,5 @@ tzdata==2022.7
 gunicorn==19.7.1
 psycopg2==2.9.6
 whitenoise==6.4.0
-
+django-watson
 

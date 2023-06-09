@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from watson import search as watson
+
 
 
 
@@ -38,6 +40,38 @@ def getProducts(request):
 
     serializer = ProductSerializer(products, many=True)
     return Response({'products':serializer.data, 'page':page, 'pages':paginator.num_pages})
+
+
+
+# @api_view(['GET'])
+# def getProducts(request):
+#     query = request.query_params.get('keyword', '')
+#     page = request.query_params.get('page', 1)
+
+#     product_instance = Product()  # Create an instance of the Product model
+#     search_results = watson.search(product_instance, query)
+
+#     # Extract product IDs from search results
+#     product_ids = [result.object.id for result in search_results]
+
+#     # Retrieve products based on the IDs
+#     products = Product.objects.filter(id__in=product_ids).order_by('createdAt')
+
+#     paginator = Paginator(products, 20)
+
+#     try:
+#         products = paginator.page(page)
+#     except PageNotAnInteger:
+#         products = paginator.page(1)
+#     except EmptyPage:
+#         products = paginator.page(paginator.num_pages)
+
+#     page = int(page)
+
+#     serializer = ProductSerializer(products, many=True)
+#     return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+
 
 @api_view(['GET'])
 def get_store_products(request, store_id):

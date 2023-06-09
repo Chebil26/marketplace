@@ -6,7 +6,7 @@ import Select from 'react-select';
 import debounce from 'lodash/debounce';
 
 function SelectBook(props) {
-  const API_URL = 'http://localhost:8000/api/books/';
+  const API_URL = `${process.env.REACT_APP_API_SERVER}/api/books/`;
 
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
@@ -14,7 +14,6 @@ function SelectBook(props) {
   const [selectedOption, setSelectedOption] = useState(null); // added state for selected option
   function handleClick() {
     props.sendDataToParent(inputValue);
-    
   }
 
   const loadOptions = async (inputValue) => {
@@ -29,7 +28,7 @@ function SelectBook(props) {
     setOptions(options);
   };
 
-  console.log(options)
+  console.log(options);
 
   const debouncedLoadOptions = debounce(loadOptions, 500);
 
@@ -39,7 +38,6 @@ function SelectBook(props) {
 
   function handleClick() {
     props.sendDataToParent(selectedOption);
-    
   }
 
   const handleInputChange = (inputValue) => {
@@ -49,7 +47,7 @@ function SelectBook(props) {
   };
 
   const colorStyles = {
-    control: (styles) => ({ ...styles, backgroundColor: "white" }),
+    control: (styles) => ({ ...styles, backgroundColor: 'white' }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
       return { ...styles, color: data.color };
     },
@@ -57,22 +55,22 @@ function SelectBook(props) {
       return {
         ...styles,
         backgroundColor: data.color,
-        color: "#fff",
+        color: '#fff',
       };
     },
     multiValueLabel: (styles, { data }) => {
       return {
         ...styles,
-        color: "#fff",
+        color: '#fff',
       };
     },
     multiValueRemove: (styles, { data }) => {
       return {
         ...styles,
-        color: "#fff",
-        cursor: "pointer",
-        ":hover": {
-          color: "#fff",
+        color: '#fff',
+        cursor: 'pointer',
+        ':hover': {
+          color: '#fff',
         },
       };
     },
@@ -90,9 +88,10 @@ function SelectBook(props) {
         onChange={handleSelectChange} // added onChange handler to update selected option
         value={selectedOption} // added value prop to show selected option
         styles={colorStyles}
-
       />
-      <Button className="m-1"variant='success' onClick={handleClick}>Confirm</Button>
+      <Button className='m-1' variant='success' onClick={handleClick}>
+        Confirm
+      </Button>
     </div>
   );
 }

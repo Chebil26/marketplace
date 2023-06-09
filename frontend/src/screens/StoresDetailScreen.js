@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listStoreDetails } from '../actions/storeActions';
-import { listProducts } from '../actions/productActions';
+import { getProductsByStore } from '../actions/productActions';
 import Product from '../components/Product';
 import StoreHeader from '../components/StoreHeader';
 
@@ -21,25 +21,27 @@ function StoreDetailScreen() {
   const dispatch = useDispatch();
 
   const storeDetails = useSelector((state) => state.storeDetails);
-  const { error, loading, store } = storeDetails;
+  const { error: storeError, loading: storeLoading, store } = storeDetails;
 
-  const productList = useSelector((state) => state.productList);
+  const productByStore = useSelector((state) => state.productByStore);
   const {
     loading: loadingProducts,
-    error: errorProducts,
+    error,
     products,
-  } = productList;
+    pages,
+    page,
+  } = productByStore;
 
   useEffect(() => {
     dispatch(listStoreDetails(id));
-    dispatch(listProducts());
+    dispatch(getProductsByStore(store.id));
   }, [dispatch]);
 
-  const storeProducts = products.filter(
-    (product) => product.store === store.name
-  );
+  // const storeProducts = products.filter(
+  //   (product) => product.store === store.name
+  // );
 
-  if (loading || loadingProducts || !store) {
+  if (storeLoading || loadingProducts || !store) {
     return <div>Loading...</div>;
   }
 
@@ -89,7 +91,7 @@ function StoreDetailScreen() {
         </Typography>
         <Divider />
         <Grid container spacing={3}>
-          {storeProducts.map((product) => (
+          {products.map((product) => (
             <Grid item key={product._id} xs={12} sm={6} md={4} lg={3} xl={3}>
               <Product product={product} />
             </Grid>

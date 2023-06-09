@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from books.models import Book
+from watson import search as watson
+
 
 
 class Store(models.Model):
@@ -58,6 +60,16 @@ class Product(models.Model):
 
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
+    
+    
+    search_fields = (
+        'name',
+        'author',
+        'category',
+        'isbn',
+    )
+    
+    
 
     def __str__(self):
         return self.name
