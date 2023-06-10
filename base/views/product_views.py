@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from fuzzywuzzy import fuzz, process
-
 
 
 
@@ -22,15 +20,7 @@ def getProducts(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-
-    products = Product.objects.all()
-
-    if query:
-        processed_results = process.extract(query, products, limit=5, scorer=fuzz.token_sort_ratio)
-        matched_results = [result[0] for result in processed_results if result[1] >= 70]
-        products = Product.objects.filter(name__in=matched_results)
-
-    products = products.order_by('createdAt')
+    products = Product.objects.filter(Q(name__icontains=query) | Q(author__icontains=query) | Q(category__icontains=query) | Q(isbn__icontains=query)).order_by('createdAt')
     page = request.query_params.get('page')
     paginator = Paginator(products, 20)
 
@@ -47,37 +37,7 @@ def getProducts(request):
     page = int(page)
 
     serializer = ProductSerializer(products, many=True)
-    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
-
-# @api_view(['GET'])
-# def getProducts(request):
-#     query = request.query_params.get('keyword', '')
-#     page = request.query_params.get('page', 1)
-
-#     product_instance = Product()  # Create an instance of the Product model
-#     search_results = watson.search(product_instance, query)
-
-#     # Extract product IDs from search results
-#     product_ids = [result.object.id for result in search_results]
-
-#     # Retrieve products based on the IDs
-#     products = Product.objects.filter(id__in=product_ids).order_by('createdAt')
-
-#     paginator = Paginator(products, 20)
-
-#     try:
-#         products = paginator.page(page)
-#     except PageNotAnInteger:
-#         products = paginator.page(1)
-#     except EmptyPage:
-#         products = paginator.page(paginator.num_pages)
-
-#     page = int(page)
-
-#     serializer = ProductSerializer(products, many=True)
-#     return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
-
-
+    return Response({'products':serializer.data, 'page':page, 'pages':paginator.num_pages})
 
 @api_view(['GET'])
 def get_store_products(request, store_id):
