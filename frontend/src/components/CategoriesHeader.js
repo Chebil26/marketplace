@@ -1,13 +1,10 @@
+import { AppBar, Button, Container, Toolbar } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppBar, Toolbar, Button, Container, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { LinkContainer } from 'react-router-bootstrap';
-
-import SearchBox from './SearchBox';
-import { logout } from '../actions/userActions';
 import { createProduct } from '../actions/productActions';
+import { logout } from '../actions/userActions';
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 function CategoriesHeader({ categories, filterHandler, clearHandler }) {

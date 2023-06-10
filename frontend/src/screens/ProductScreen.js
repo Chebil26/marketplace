@@ -122,11 +122,10 @@ const ProductScreen = ({ match }) => {
   return (
     <Container>
       <Button
-        component={Link}
-        to='/'
         variant='contained'
         color='inherit'
-        sx={{ marginBottom: 3, marginTop: '10px' }}>
+        sx={{ marginBottom: 3, marginTop: '10px' }}
+        onClick={() => navigate(-1)}>
         <ArrowBackIcon sx={{ marginRight: '0.5rem' }} />
         Go back
       </Button>
@@ -303,11 +302,11 @@ const ProductScreen = ({ match }) => {
             <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
               Reviews
             </Typography>
-            {product.reviews.length === 0 ? (
-              <Message variant='info'>No Reviews</Message>
-            ) : (
-              <CardContent>
-                {product.reviews.map((review) => (
+            <CardContent>
+              {product.reviews.length === 0 ? (
+                <Message variant='info'>No Reviews</Message>
+              ) : (
+                product.reviews.map((review) => (
                   <Box key={review._id} sx={{ mb: 3 }}>
                     <Typography variant='subtitle1' component='div'>
                       <strong>{review.name}</strong>
@@ -320,59 +319,67 @@ const ProductScreen = ({ match }) => {
                       {review.comment}
                     </Typography>
                   </Box>
-                ))}
-                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
-                  Write a Customer Review
-                </Typography>
-                {loadingProductReview && <Loader />}
-                {successProductReview && (
-                  <Message variant='success'>
-                    Review submitted successfully
-                  </Message>
-                )}
-                {errorProductReview && (
-                  <Message variant='danger'>{errorProductReview}</Message>
-                )}
-                {userInfo ? (
-                  <Box component='form' onSubmit={submitHandler}>
-                    <FormControl fullWidth sx={{ mb: 2 }}>
-                      <InputLabel>Rating</InputLabel>
-                      <Select
-                        value={rating}
-                        onChange={(e) => setRating(e.target.value)}>
-                        <MenuItem value={1}>1 - Poor</MenuItem>
-                        <MenuItem value={2}>2 - Fair</MenuItem>
-                        <MenuItem value={3}>3 - Good</MenuItem>
-                        <MenuItem value={4}>4 - Very Good</MenuItem>
-                        <MenuItem value={5}>5 - Excellent</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <TextField
-                      variant='outlined'
-                      label='Comment'
-                      fullWidth
-                      multiline
-                      rows={4}
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      sx={{ mb: 2 }}
-                    />
-                    <Button
-                      type='submit'
-                      variant='contained'
-                      color='primary'
-                      size='large'
-                      fullWidth>
-                      Submit
-                    </Button>
-                  </Box>
-                ) : (
-                  <Message variant='info'>
-                    Please <Link to='/login'>sign in</Link> to write a review
-                  </Message>
-                )}
-              </CardContent>
-            )}
+                ))
+              )}
+              <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+                Write a Review
+              </Typography>
+              {loadingProductReview && <Loader />}
+              {successProductReview && (
+                <Message variant='success'>
+                  Review submitted successfully
+                </Message>
+              )}
+              {errorProductReview && (
+                <Message variant='danger'>{errorProductReview}</Message>
+              )}
+              {userInfo ? (
+                <Box component='form' onSubmit={submitHandler}>
+                  <FormControl fullWidth sx={{ mb: 2 }}>
+                    <InputLabel htmlFor='rating-select'>Rating</InputLabel>
+                    <Select
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                      inputProps={{
+                        name: 'rating',
+                        id: 'rating-select',
+                      }}>
+                      <MenuItem value={1}>1 - Poor</MenuItem>
+                      <MenuItem value={2}>2 - Fair</MenuItem>
+                      <MenuItem value={3}>3 - Good</MenuItem>
+                      <MenuItem value={4}>4 - Very Good</MenuItem>
+                      <MenuItem value={5}>5 - Excellent</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    variant='outlined'
+                    label='Comment'
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    sx={{ mb: 2 }}
+                    inputProps={{
+                      name: 'comment',
+                      id: 'comment-input',
+                    }}
+                  />
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    color='primary'
+                    size='large'
+                    fullWidth>
+                    Submit
+                  </Button>
+                </Box>
+              ) : (
+                <Message variant='info'>
+                  Please <Link to='/login'>sign in</Link> to write a review
+                </Message>
+              )}
+            </CardContent>
           </Grid>
         </Grid>
       )}
