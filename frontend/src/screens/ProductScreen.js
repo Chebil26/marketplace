@@ -38,7 +38,7 @@ import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import { getBookRecommendations } from '../actions/recommendationActions';
 import { createOrder } from '../actions/orderActions';
 
-const ProductScreen = ({ match }) => {
+const ProductScreen = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
@@ -171,11 +171,14 @@ const ProductScreen = ({ match }) => {
                 <Typography variant='h6' component='div' sx={{ mb: 2 }}>
                   by {product.author}
                 </Typography>
-                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
-                  <Link to={`/stores/${product.store_id}`} color='inherit'>
-                    Store: {product.store}
-                  </Link>
-                </Typography>
+
+                <Button
+                  variant='outlined'
+                  color='error'
+                  onClick={() => navigate(`/stores/${product.store_id}`)}>
+                  {product.store}
+                </Button>
+
                 <Typography variant='h6' component='div' sx={{ mb: 2 }}>
                   Price: {product.price}DA
                 </Typography>
@@ -263,13 +266,13 @@ const ProductScreen = ({ match }) => {
                 </Typography>
                 <Slider
                   arrows={true}
-                  dots={false}
+                  dots={true}
                   swipe={true}
                   infinite={true}
+                  autoplaySpeed={2000}
                   slidesToShow={2}
                   slidesToScroll={1}
-                  autoplay={true} // Add this line
-                >
+                  autoplay={true}>
                   {Object.keys(recommendations).map((bookTitle) => {
                     const book = recommendations[bookTitle];
                     return (
