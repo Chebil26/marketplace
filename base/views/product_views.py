@@ -216,3 +216,8 @@ def createProductReview(request, pk):
         return Response('Review Added')
 
 
+@api_view(['GET'])
+def products_by_isbn(request, isbn):
+    products = Product.objects.filter(isbn=isbn)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)

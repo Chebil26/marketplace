@@ -85,23 +85,7 @@ const AdminScreen = () => {
             <IconButton color='inherit'>
               <AssignmentIcon />
             </IconButton>
-            <Typography variant='subtitle1'>My Products</Typography>
-          </StyledButton>
-        </ListItem>
-        <ListItem button component={Link} to='/blog'>
-          <StyledButton variant='contained' color='warning'>
-            <IconButton color='inherit'>
-              <CreateIcon />
-            </IconButton>
-            <Typography variant='subtitle1'>My Blog</Typography>
-          </StyledButton>
-        </ListItem>
-        <ListItem button component={Link} to={`/stores/${store.id}`}>
-          <StyledButton variant='contained' color='error'>
-            <IconButton color='inherit'>
-              <BookIcon />
-            </IconButton>
-            <Typography variant='subtitle1'>{store.name}</Typography>
+            <Typography variant='subtitle1'>Products</Typography>
           </StyledButton>
         </ListItem>
         <ListItem button component={Link} to='/admin/orders'>
@@ -109,9 +93,18 @@ const AdminScreen = () => {
             <IconButton color='inherit'>
               <ShoppingCartIcon />
             </IconButton>
-            <Typography variant='subtitle1'>Your Orders</Typography>
+            <Typography variant='subtitle1'>Orders</Typography>
           </StyledButton>
         </ListItem>
+        <ListItem button component={Link} to='/blog'>
+          <StyledButton variant='contained' color='warning'>
+            <IconButton color='inherit'>
+              <CreateIcon />
+            </IconButton>
+            <Typography variant='subtitle1'>Blog</Typography>
+          </StyledButton>
+        </ListItem>
+
         <ListItem>
           <StyledButton
             variant='contained'
@@ -122,6 +115,15 @@ const AdminScreen = () => {
               <AddIcon />
             </IconButton>
             <Typography variant='subtitle1'>Create a Book</Typography>
+          </StyledButton>
+        </ListItem>
+
+        <ListItem button component={Link} to={`/stores/${store.id}`}>
+          <StyledButton variant='contained' color='error'>
+            <IconButton color='inherit'>
+              <BookIcon />
+            </IconButton>
+            <Typography variant='subtitle1'>{store.name}'s View</Typography>
           </StyledButton>
         </ListItem>
       </List>

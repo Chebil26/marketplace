@@ -19,21 +19,26 @@ import {
   DialogContent,
   DialogActions,
   Link,
+  IconButton,
 } from '@mui/material';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import Product from '../components/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   createProductReview,
   listProductDetails,
+  getSimilarProducts,
 } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
+import Review from '../components/Review';
+import CustomNextArrow from '../components/CustomNextArrow';
+import CustomPrevArrow from '../components/CustomPrevArrow';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import { getBookRecommendations } from '../actions/recommendationActions';
 import { createOrder } from '../actions/orderActions';
@@ -69,6 +74,16 @@ const ProductScreen = () => {
     recommendations,
   } = bookRecommendations;
 
+  // const similarProducts = useSelector((state) => state.similarProducts);
+  // const {
+  //   loading: loadingSimilarProducts,
+  //   error: errorSimilarProducts,
+  //   aa,
+  // } = similarProducts;
+  let { products } = useSelector((state) => state.similarProducts);
+  if (product.isbn == 9999999999999) {
+    products = [];
+  }
   useEffect(() => {
     if (successProductReview) {
       setRating(0);
@@ -76,13 +91,19 @@ const ProductScreen = () => {
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
     dispatch(listProductDetails(id));
-    dispatch(getBookRecommendations(product.name));
+    if (product) {
+      dispatch(getBookRecommendations(product.name));
+      dispatch(getSimilarProducts(product.isbn));
+    }
+    console.log(products);
 
     return () => {
       // Clear the recommendations state after using it
       dispatch({ type: 'CLEAR_BOOK_RECOMMENDATIONS' });
     };
-  }, [dispatch, id, successProductReview, product.name]);
+  }, [dispatch, id, successProductReview, product.name, product.isbn]);
+
+  console.log(products);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -117,6 +138,11 @@ const ProductScreen = () => {
 
   const handleCancelOrder = () => {
     setOpenDialog(false);
+  };
+
+  const recommendationHandler = (author) => {
+    const url = `/?keyword=${encodeURIComponent(author)}&page=1`;
+    navigate(url);
   };
 
   return (
@@ -161,6 +187,89 @@ const ProductScreen = () => {
                 </Typography>
               </CardContent>
             </Card>
+
+            {/* {loadingSimilarProducts ? (
+              <Loader />
+            ) : errorSimilarProducts ? (
+              <Message variant='danger'>{error}</Message>
+            ) : (
+              <> */}
+            {products.length === 0 ? (
+              <Message variant='info'>No similar products found.</Message>
+            ) : (
+              <Box sx={{ mt: 2, marginBottom: 5 }}>
+                <Typography variant='h6' component='div' sx={{ mb: 2 }}>
+                  Books Stores who sell:{' '}
+                  <Typography color='green'>{product.name}</Typography>
+                </Typography>
+                <Slider
+                  arrows={true}
+                  dots={true}
+                  swipe={true}
+                  infinite={true}
+                  autoplaySpeed={2500}
+                  slidesToShow={1}
+                  slidesToScroll={1}
+                  autoplay={true}
+                  responsive={[
+                    {
+                      breakpoint: 600,
+                      settings: {
+                        slidesToShow: 1,
+                      },
+                    },
+                  ]}
+                  // prevArrow={<CustomPrevArrow />} // Add custom previous arrow
+                  // nextArrow={<CustomNextArrow />} // Add custom next arrow
+                >
+                  {products.map((product) => (
+                    <Box
+                      key={product.id}
+                      display='flex'
+                      alignItems='center'
+                      marginBottom={2}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginRight: '1rem',
+                        }}>
+                        {product.store_image && (
+                          <IconButton
+                            onClick={() =>
+                              navigate(`/stores/${product.store_id}`)
+                            }
+                            sx={{
+                              padding: 0,
+                              marginRight: 1,
+                            }}>
+                            <CardMedia
+                              component='img'
+                              src={`${process.env.REACT_APP_API_SERVER}${product.store_image}`}
+                              alt={product.store.name}
+                              sx={{
+                                height: 40,
+                                width: 40,
+                                borderRadius: '30%',
+                              }}
+                            />
+                          </IconButton>
+                        )}
+                        <Button
+                          variant='contained'
+                          color='success'
+                          onClick={() =>
+                            navigate(`/stores/${product.store_id}`)
+                          }>
+                          {product.store}
+                        </Button>
+                      </Box>
+                      <Product product={product} />
+                    </Box>
+                  ))}
+                </Slider>
+              </Box>
+            )}
           </Grid>
           <Grid item md={6}>
             <Card>
@@ -272,29 +381,32 @@ const ProductScreen = () => {
                   autoplaySpeed={2000}
                   slidesToShow={2}
                   slidesToScroll={1}
+                  nextArrow={<CustomNextArrow />}
                   autoplay={true}>
                   {Object.keys(recommendations).map((bookTitle) => {
                     const book = recommendations[bookTitle];
+                    const author = book && book['Book-Author'];
+
                     return (
-                      <Card key={bookTitle}>
-                        <CardMedia
-                          component='img'
-                          height='200'
-                          image={book && book['Image-URL-M']}
-                          alt={bookTitle}
-                        />
-                        <CardContent>
-                          <Typography
-                            variant='h6'
-                            component='div'
-                            sx={{ mb: 1 }}>
-                            {bookTitle}
-                          </Typography>
-                          <Typography variant='subtitle1' component='div'>
-                            {book && book['Book-Author']}
-                          </Typography>
-                        </CardContent>
-                      </Card>
+                      <a
+                        key={bookTitle}
+                        href='#'
+                        onClick={() => recommendationHandler(author)}>
+                        <Card>
+                          <CardMedia
+                            component='img'
+                            height='200'
+                            image={book && book['Image-URL-M']}
+                            alt={bookTitle}
+                          />
+                          <CardContent>
+                            <Typography sx={{ mb: 1 }}>{bookTitle}</Typography>
+                            <Typography variant='subtitle1' component='div'>
+                              {author}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </a>
                     );
                   })}
                 </Slider>
@@ -302,28 +414,22 @@ const ProductScreen = () => {
             )}
           </Grid>
           <Grid item md={6}>
-            <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+            <Typography
+              variant='h4'
+              component='h2'
+              sx={{ marginBottom: '1rem', fontWeight: 'bold', color: '#333' }}>
               Reviews
             </Typography>
             <CardContent>
-              {product.reviews.length === 0 ? (
-                <Message variant='info'>No Reviews</Message>
-              ) : (
-                product.reviews.map((review) => (
-                  <Box key={review._id} sx={{ mb: 3 }}>
-                    <Typography variant='subtitle1' component='div'>
-                      <strong>{review.name}</strong>
-                    </Typography>
-                    <Rating value={review.rating} color={'#f8e825'} />
-                    <Typography variant='subtitle1' component='div'>
-                      {review.createdAt.substring(0, 10)}
-                    </Typography>
-                    <Typography variant='body1' component='p' sx={{ mb: 2 }}>
-                      {review.comment}
-                    </Typography>
-                  </Box>
-                ))
-              )}
+              <Box>
+                {product.reviews.length === 0 ? (
+                  <Message variant='info'>No Reviews</Message>
+                ) : (
+                  product.reviews.map((review) => (
+                    <Review key={review._id} review={review} />
+                  ))
+                )}
+              </Box>
               <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
                 Write a Review
               </Typography>
@@ -339,9 +445,7 @@ const ProductScreen = () => {
               {userInfo ? (
                 <Box component='form' onSubmit={submitHandler}>
                   <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel htmlFor='rating-select'>Rating</InputLabel>
                     <Select
-                      value={rating}
                       onChange={(e) => setRating(e.target.value)}
                       inputProps={{
                         name: 'rating',
@@ -353,7 +457,9 @@ const ProductScreen = () => {
                       <MenuItem value={4}>4 - Very Good</MenuItem>
                       <MenuItem value={5}>5 - Excellent</MenuItem>
                     </Select>
+                    <InputLabel htmlFor='rating-select'>Rating</InputLabel>
                   </FormControl>
+
                   <TextField
                     variant='outlined'
                     label='Comment'

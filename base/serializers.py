@@ -11,6 +11,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
+    store_image = serializers.SerializerMethodField(read_only=True)
 
     store = serializers.SlugRelatedField(
         slug_field='name',
@@ -22,14 +23,17 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
-        read_only_fields = ('id',)
-
+        read_only_fields = ('id', 'store_image')
 
     def get_reviews(self, obj):
         reviews = obj.review_set.all()
         serializer = ReviewSerializer(reviews, many=True)
         return serializer.data
 
+    def get_store_image(self, obj):
+        if obj.store:
+            return obj.store.image.url
+        return None
 
 class StoreSerializer(serializers.ModelSerializer):
 

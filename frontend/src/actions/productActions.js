@@ -25,6 +25,9 @@ import {
   PRODUCTS_BY_STORE_REQUEST,
   PRODUCTS_BY_STORE_SUCCESS,
   PRODUCTS_BY_STORE_FAIL,
+  SIMILAR_PRODUCTS_REQUEST,
+  SIMILAR_PRODUCTS_SUCCESS,
+  SIMILAR_PRODUCTS_FAIL,
 } from '../constants/productConstants';
 
 export const listProducts =
@@ -276,3 +279,23 @@ export const getProductsByStore =
       });
     }
   };
+
+export const getSimilarProducts = (isbn) => async (dispatch) => {
+  try {
+    dispatch({ type: SIMILAR_PRODUCTS_REQUEST });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/api/products/similar/${isbn}`
+    );
+
+    dispatch({ type: SIMILAR_PRODUCTS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SIMILAR_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};

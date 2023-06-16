@@ -88,7 +88,6 @@ function HomeScreen() {
 
   const authorHandler = (author) => {
     history(`?keyword=${author}&page=1`);
-    console.log(author);
   };
 
   const filterHandler = (category) => {

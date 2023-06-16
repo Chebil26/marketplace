@@ -26,6 +26,9 @@ import {
   PRODUCTS_BY_STORE_REQUEST,
   PRODUCTS_BY_STORE_SUCCESS,
   PRODUCTS_BY_STORE_FAIL,
+  SIMILAR_PRODUCTS_REQUEST,
+  SIMILAR_PRODUCTS_SUCCESS,
+  SIMILAR_PRODUCTS_FAIL,
 } from '../constants/productConstants';
 
 export const ProductListReducer = (state = { products: [] }, action) => {
@@ -173,6 +176,22 @@ export const productByStoreReducer = (
       };
     case PRODUCTS_BY_STORE_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const similarProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case SIMILAR_PRODUCTS_REQUEST:
+      return { loading: true, products: [] };
+
+    case SIMILAR_PRODUCTS_SUCCESS:
+      return { loading: false, products: action.payload };
+
+    case SIMILAR_PRODUCTS_FAIL:
+      return { loading: false, error: action.payload };
+
     default:
       return state;
   }

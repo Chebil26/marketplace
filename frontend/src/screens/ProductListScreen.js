@@ -160,8 +160,12 @@ const ProductListScreen = ({ match }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {storeProducts.map((product) => (
-                <TableRow key={product._id}>
+              {storeProducts.map((product, index) => (
+                <TableRow
+                  key={product._id}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? '#ffffff' : '#f2f2f2',
+                  }}>
                   <TableCell>{product._id}</TableCell>
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.price}DA</TableCell>
@@ -182,7 +186,8 @@ const ProductListScreen = ({ match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(product._id)}>
+                      onClick={() => deleteHandler(product._id)}
+                      style={{ backgroundColor: '#CA0000', color: 'white' }}>
                       <i className='fas fa-trash'></i>
                     </Button>
                   </TableCell>
