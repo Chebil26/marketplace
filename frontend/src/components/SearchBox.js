@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, useMediaQuery } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function SearchBox() {
   let navigate = useNavigate();
   const location = useLocation();
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
   const [keyword, setKeyword] = useState('');
   const submitHandler = (e) => {
@@ -17,21 +18,18 @@ function SearchBox() {
   };
 
   return (
-    <form
-      onSubmit={submitHandler}
-      style={{ display: 'flex', marginLeft: '50px' }}>
+    <form onSubmit={submitHandler} style={{ display: 'flex' }}>
       <TextField
         type='search'
         onChange={(e) => setKeyword(e.target.value)}
-        placeholder='Explore'
+        placeholder={isSmallScreen ? 'Explore' : 'Search'}
         variant='outlined'
         size='small'
         sx={{
-          width: '320px',
+          width: isSmallScreen ? '100%' : '320px',
           borderRadius: '10px',
           marginRight: '4px',
           backgroundColor: 'white',
-          // paddingRight: '10px', // Add padding to the right
         }}
       />
       <Button type='submit' variant='contained' color='success'>
