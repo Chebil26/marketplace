@@ -10,6 +10,11 @@ import {
   MenuItem,
   Menu,
   Box,
+  useMediaQuery,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
 import { SupervisorAccount } from '@mui/icons-material';
 import StoreIcon from '@mui/icons-material/Store';
@@ -17,6 +22,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import Person2Icon from '@mui/icons-material/Person2';
 import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -92,6 +98,14 @@ function Header() {
     setAnchorEl(null);
   };
 
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <header>
       <StyledAppBar position='static'>
@@ -103,26 +117,40 @@ function Header() {
               </StyledTypography>
             </StyledLink>
 
-            <StyledLink to='/stores'>
-              <StyledButton color='inherit'>
-                <StoreIcon />
-                Stores
-              </StyledButton>
-            </StyledLink>
+            {isSmallScreen && (
+              <IconButton
+                color='inherit'
+                edge='start'
+                onClick={toggleDrawer}
+                sx={{ display: { md: 'none' } }}>
+                <MenuIcon />
+              </IconButton>
+            )}
 
-            <StyledLink to='/posts'>
-              <StyledButton color='inherit'>
-                <FeedIcon />
-                Blogs
-              </StyledButton>
-            </StyledLink>
+            {!isSmallScreen && (
+              <>
+                <StyledLink to='/stores'>
+                  <StyledButton color='inherit'>
+                    <StoreIcon />
+                    Stores
+                  </StyledButton>
+                </StyledLink>
 
-            <StyledLink to='/cart'>
-              <StyledButton color='inherit'>
-                <BookmarksIcon />
-                My books
-              </StyledButton>
-            </StyledLink>
+                <StyledLink to='/posts'>
+                  <StyledButton color='inherit'>
+                    <FeedIcon />
+                    Blogs
+                  </StyledButton>
+                </StyledLink>
+
+                <StyledLink to='/cart'>
+                  <StyledButton color='inherit'>
+                    <BookmarksIcon />
+                    My books
+                  </StyledButton>
+                </StyledLink>
+              </>
+            )}
 
             <SearchBox />
             {userInfo && userInfo.isAdmin && (
@@ -171,14 +199,60 @@ function Header() {
               </div>
             ) : (
               <StyledLink to='/login'>
-                <StyledButton color='inherit' style={{ marginLeft: '6rem' }}>
-                  <i className='fas fa-user'></i> Login
-                </StyledButton>
+                {!isSmallScreen && (
+                  <StyledButton color='inherit' style={{ marginLeft: '6rem' }}>
+                    <i className='fas fa-user'></i> Login
+                  </StyledButton>
+                )}
+                {isSmallScreen && (
+                  <IconButton color='inherit'>
+                    <i className='fas fa-user'></i>
+                  </IconButton>
+                )}
               </StyledLink>
             )}
           </Toolbar>
         </Container>
       </StyledAppBar>
+
+      {/* Drawer */}
+      <Drawer anchor='left' open={drawerOpen} onClose={toggleDrawer}>
+        <List sx={{ width: 250 }} onClick={toggleDrawer}>
+          <ListItem button component={Link} to='/'>
+            <ListItemText primary='Home' />
+          </ListItem>
+          <ListItem button component={Link} to='/stores'>
+            <ListItemText primary='Stores' />
+          </ListItem>
+          <ListItem button component={Link} to='/posts'>
+            <ListItemText primary='Blogs' />
+          </ListItem>
+          <ListItem button component={Link} to='/cart'>
+            <ListItemText primary='My books' />
+          </ListItem>
+          {userInfo && userInfo.isAdmin && (
+            <ListItem button component={Link} to='/admin'>
+              <ListItemText primary='Admin Panel' />
+            </ListItem>
+          )}
+          {userInfo ? (
+            <>
+              <ListItem button component={Link} to='/profile'>
+                <ListItemText primary='Profile' />
+              </ListItem>
+              <ListItem button onClick={logoutHandler}>
+                <ListItemText primary='Logout' />
+              </ListItem>
+            </>
+          ) : (
+            <ListItem button component={Link} to='/login'>
+              <ListItemText primary='Login' />
+            </ListItem>
+          )}
+
+          <SearchBox />
+        </List>
+      </Drawer>
     </header>
   );
 }

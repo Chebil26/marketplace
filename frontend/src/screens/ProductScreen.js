@@ -220,7 +220,7 @@ const ProductScreen = () => {
                     },
                   ]}
                   // prevArrow={<CustomPrevArrow />} // Add custom previous arrow
-                  // nextArrow={<CustomNextArrow />} // Add custom next arrow
+                  nextArrow={<CustomNextArrow />} // Add custom next arrow
                 >
                   {products.map((product) => (
                     <Box

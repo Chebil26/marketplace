@@ -1,11 +1,13 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, CardMedia } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import Rating from './Rating';
 
 function Product({ product }) {
   const placeholder = `${process.env.REACT_APP_API_SERVER}/images/book_placeholder.png`;
+  const storePlaceholeder = `${process.env.REACT_APP_API_SERVER}/images/store_placeholder.png`;
+  const storeNamePlaceholder = 'store';
 
   return (
     <Card className='my-1 p-2 rounded' sx={{ width: 200, overflow: 'hidden' }}>
@@ -49,7 +51,6 @@ function Product({ product }) {
             <strong>{product.name}</strong>
           </Typography>
         </Link>
-
         <Link to={`?keyword=${product.author}&page=1`}>
           <Typography
             variant='subtitle2'
@@ -59,15 +60,37 @@ function Product({ product }) {
           </Typography>
         </Link>
 
-        <Link to={`/stores/${product.store_id}`}>
+        <Link
+          to={product.store_id ? `/stores/${product.store_id}` : '/stores'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+          }}>
+          <CardMedia
+            component='img'
+            src={
+              product.store_image
+                ? `${process.env.REACT_APP_API_SERVER}${product.store_image}`
+                : storePlaceholeder
+            }
+            alt={product.store}
+            sx={{
+              height: 32,
+              width: 32,
+              borderRadius: '50%',
+              marginRight: '0.5rem',
+            }}
+          />
           <Typography
             variant='subtitle1'
             component='p'
             sx={{ margin: 0, padding: 0 }}>
-            <strong>{product.store}</strong>
+            <strong>
+              {product.store ? product.store : storeNamePlaceholder}
+            </strong>
           </Typography>
         </Link>
-
         <Typography
           variant='body1'
           component='p'
@@ -80,7 +103,6 @@ function Product({ product }) {
             />
           </div>
         </Typography>
-
         <Typography
           variant='subtitle2'
           component='p'
