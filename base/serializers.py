@@ -103,8 +103,13 @@ class OrderSerializer(serializers.ModelSerializer):
         queryset=Store.objects.all()
     )
     store_id = serializers.PrimaryKeyRelatedField(source='store', read_only=True)
-    product = serializers.PrimaryKeyRelatedField(
-        queryset=Product.objects.none()
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    product_image = serializers.ImageField(source='product.image', read_only=True)
+    product_defaultImage = serializers.CharField(source='product.defaultImage', read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(),
+        write_only=True,
+        source='product'
     )
     username = serializers.SerializerMethodField()
 

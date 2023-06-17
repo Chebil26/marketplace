@@ -58,6 +58,7 @@ const AdminOrdersListScreen = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User</TableCell>
+                <TableCell>Product</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Paid</TableCell>
                 <TableCell>Delivered</TableCell>
@@ -68,6 +69,7 @@ const AdminOrdersListScreen = () => {
               {orders.map((order) => (
                 <TableRow key={order._id}>
                   <TableCell>{order.username}</TableCell>
+                  <TableCell>{order.product_name}</TableCell>
                   <TableCell>{formatDate(order.created_at)}</TableCell>
                   <TableCell>{order.isPaid ? 'Paid' : 'Not Paid'}</TableCell>
                   <TableCell>
