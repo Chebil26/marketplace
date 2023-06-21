@@ -85,7 +85,7 @@ const AdminOrdersListScreen = () => {
         </TableContainer>
       ) : (
         <Typography variant='body1' color='textSecondary'>
-          You are not authorized to view this page.
+          You are not authorized to view this page
         </Typography>
       )}
     </div>
