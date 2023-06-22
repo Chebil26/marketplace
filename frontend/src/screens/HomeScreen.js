@@ -26,6 +26,7 @@ import Post from '../components/Post';
 import Product from '../components/Product';
 import { getPosts } from '../features/postSlice';
 import Store from '../components/Store';
+import FilterDropdownMenu from '../components/FilterDropdownMenu';
 
 function HomeScreen() {
   const settings = {
@@ -96,6 +97,7 @@ function HomeScreen() {
 
   const clearHandler = () => {
     setFilter('');
+    history(`?keyword=&page=1`);
   };
 
   const handleSearch = (event) => {
@@ -175,11 +177,11 @@ function HomeScreen() {
                   <IconButton onClick={() => handleClearSearch()}></IconButton>
                 </Box>
 
-                {/* <FilterDropdownMenu
+                <FilterDropdownMenu
                   categories={categories}
                   filterHandler={filterHandler}
                   clearHandler={clearHandler}
-                /> */}
+                />
 
                 {loading ? (
                   <Loader />

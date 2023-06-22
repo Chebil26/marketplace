@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     
     "corsheaders",
+    'django_crontab',
     
     'watson',
 
@@ -256,4 +257,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+
+
+CRONJOBS = [
+    ('*/1 * * * *', 'base.cron.hello')
+]
 
