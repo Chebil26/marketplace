@@ -27,6 +27,7 @@ import Product from '../components/Product';
 import { getPosts } from '../features/postSlice';
 import Store from '../components/Store';
 import FilterDropdownMenu from '../components/FilterDropdownMenu';
+import CarouselHome from '../components/CarouselHome';
 
 function HomeScreen() {
   const settings = {
@@ -118,8 +119,8 @@ function HomeScreen() {
         filterHandler={filterHandler}
         clearHandler={clearHandler}
       />
-      <Box marginTop={2}>
-        {!isKeywordExists && (
+      <Box marginTop={0}>
+        {/* {!isKeywordExists && (
           <Container>
             <Grid container justifyContent='center'>
               <Grid>
@@ -131,7 +132,9 @@ function HomeScreen() {
               </Grid>
             </Grid>
           </Container>
-        )}
+        )} */}
+
+        {!isKeywordExists && <CarouselHome />}
 
         <Container>
           <Box marginTop={4}>

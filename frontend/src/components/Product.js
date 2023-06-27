@@ -10,14 +10,24 @@ function Product({ product }) {
   const storeNamePlaceholder = 'store';
 
   return (
-    <Card className='my-1 p-2 rounded' sx={{ width: 200, overflow: 'hidden' }}>
+    <Card
+      className='my-1 p-2 rounded'
+      sx={{
+        width: 200, // Set a fixed width for the card
+        height: '100%', // Set the height to 100% to make all cards have the same height
+        display: 'flex',
+        flexDirection: 'column', // Arrange the content vertically
+        justifyContent: 'space-between', // Add space between the elements
+        overflow: 'hidden',
+      }}>
       <Link to={`/product/${product._id}`}>
         <div
           style={{
-            width: '9rem',
-            height: '13rem',
+            width: '10rem',
+            height: '15rem',
             overflow: 'hidden',
             position: 'relative',
+            paddingRight: '11.5rem', // Add left padding
           }}>
           <img
             src={
@@ -42,7 +52,7 @@ function Product({ product }) {
           />
         </div>
       </Link>
-      <CardContent className='p-0'>
+      <CardContent className='p-0' style={{ flexGrow: 1 }}>
         <Link to={`/product/${product._id}`}>
           <Typography
             variant='subtitle1'
@@ -59,7 +69,6 @@ function Product({ product }) {
             {product.author}
           </Typography>
         </Link>
-
         <Link
           to={product.store_id ? `/stores/${product.store_id}` : '/stores'}
           style={{

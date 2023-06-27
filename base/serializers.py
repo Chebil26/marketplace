@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Challenge, Product, Store, Review,ChallengeType, Order
+from .models import Challenge, Product, Store, Review,ChallengeType, Order, Wishlist
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -119,3 +119,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_username(self, obj):
         return self.context['request'].user.username
+    
+    
+    
+    
+class WishlistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = '__all__'

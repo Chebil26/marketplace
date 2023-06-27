@@ -125,6 +125,8 @@ class Challenge(models.Model):
     def __str__(self):
 
         return str(self.user.first_name) +  '`s  ' + str(self.challenge_type ) 
+    
+    
 class ChallengeProgres(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
@@ -134,3 +136,23 @@ class ChallengeProgres(models.Model):
         return str(self.challenge)
     
 
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True , blank=True)
+    name = models.CharField(max_length=1000, null=True, blank=True)
+    author = models.CharField(max_length=1000, null=True, blank=True)
+    isbn = models.CharField(max_length=1000, null=True, blank=True)
+    published_year = models.CharField(max_length=1000, null=True, blank=True)
+    defaultImage = models.CharField(max_length=1000, null=True, blank=True  )                 
+    publisher = models.CharField(max_length=1000, null=True, blank=True)
+    category = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=1000, null=True, blank=True)
+    
+    createdAt = models.DateTimeField(auto_now_add=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+    
+    def __str__(self):
+        return str(self.user.first_name) +  '`s  ' + str(self.name ) 
+    

@@ -15,7 +15,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  Avatar,
 } from '@mui/material';
+
 import { SupervisorAccount } from '@mui/icons-material';
 import StoreIcon from '@mui/icons-material/Store';
 import FeedIcon from '@mui/icons-material/Feed';
@@ -54,6 +56,8 @@ const StyledButton = styled(Button)`
 `;
 
 function Header() {
+  const logoLink =
+    'https://firebasestorage.googleapis.com/v0/b/adeem-9a87d.appspot.com/o/5018e1f1-a954-4aad-a65e-80f666312516.png?alt=media&token=69423685-e812-4b62-aec3-77b2ea90de3a';
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -112,6 +116,11 @@ function Header() {
         <Container>
           <Toolbar>
             <StyledLink to='/'>
+              <Avatar
+                src={logoLink}
+                alt='Adeem Logo'
+                sx={{ width: 70, height: 70 }}
+              />
               <StyledTypography variant='h6' component='div'>
                 Adeem
               </StyledTypography>

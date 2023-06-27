@@ -53,6 +53,12 @@ import {
   postUpdateReducer,
 } from './reducers/blogReducers';
 
+import {
+  createWishlistReducer,
+  fetchWishlistsReducer,
+  fetchWishlistDetailReducer,
+} from './reducers/wishlistReducers';
+
 const reducer = combineReducers({
   productList: ProductListReducer,
   productDetails: productDetailsReducer,
@@ -95,6 +101,10 @@ const reducer = combineReducers({
   postUpdate: postUpdateReducer,
   commentCreate: commentCreateReducer,
   commentList: commentListReducer,
+
+  wishListCreate: createWishlistReducer,
+  wishlistFetch: fetchWishlistsReducer,
+  WishlistFetchDetail: fetchWishlistDetailReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

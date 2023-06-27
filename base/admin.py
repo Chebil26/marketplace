@@ -11,4 +11,6 @@ admin.site.register(ChallengeType)
 admin.site.register(ChallengeProgres)
 
 
+admin.site.register(Wishlist)
+
 

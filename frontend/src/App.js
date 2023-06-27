@@ -31,6 +31,8 @@ import AdminOrdersListScreen from './screens/AdminOrdersListScreen';
 import PostCreateScreen from './screens/PostCreateScreen';
 import PostDetailScreen from './screens/PostDetailScreen';
 import PostsListScreen from './screens/PostsListScreen';
+import WishlistScreen from './screens/WishlistScreen';
+import WishlistDetailScreen from './screens/WishListDetailScreen';
 
 const theme = createTheme({
   palette: {
@@ -45,7 +47,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <div style={{ backgroundColor: theme.palette.background.default }}>
         <Router>
-          <Header />
+          <Box position='sticky' top={0} zIndex={999}>
+            <Header />
+          </Box>
           <Routes>
             <Route path='/' element={<HomeScreen />} exact />
           </Routes>
@@ -90,6 +94,12 @@ function App() {
                 <Route path='/posts' element={<PostsListScreen />} />
                 <Route path='/blog' element={<PostCreateScreen />} />
                 <Route path='/posts/:id' element={<PostDetailScreen />} />
+
+                <Route path='/wishlist' element={<WishlistScreen />} />
+                <Route
+                  path='/wishlist/:id'
+                  element={<WishlistDetailScreen />}
+                />
               </Routes>
             </Box>
           </Box>
