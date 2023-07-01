@@ -15,7 +15,13 @@ const StoreHeader = () => {
   const { error, loading, store } = storeDetails;
 
   return (
-    <AppBar position='static' sx={{ bgcolor: '#4D86DB' }}>
+    <AppBar
+      position='static'
+      sx={{
+        bgcolor: 'rgba(77, 134, 219, 0)',
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+      }}
+      elevation={0}>
       <Toolbar>
         <Box>
           <CardMedia
@@ -27,7 +33,10 @@ const StoreHeader = () => {
         </Box>
 
         <Box>
-          <Typography variant='h6' component='div' sx={{ pr: 2 }}>
+          <Typography
+            variant='h6'
+            component='div'
+            sx={{ pr: 2, color: 'black' }}>
             <Link
               to={`/stores/${store.id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -39,13 +48,15 @@ const StoreHeader = () => {
           <Button
             component={Link}
             to={`/stores/${store.id}/contact`}
-            color='inherit'>
+            color='inherit'
+            sx={{ color: 'black' }}>
             Contact
           </Button>
           <Button
             component={Link}
             to={`/stores/${store.id}/blog`}
-            color='inherit'>
+            color='inherit'
+            sx={{ color: 'black' }}>
             Blog
           </Button>
         </Box>

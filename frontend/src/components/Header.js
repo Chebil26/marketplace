@@ -57,7 +57,7 @@ const StyledButton = styled(Button)`
 
 function Header() {
   const logoLink =
-    'https://firebasestorage.googleapis.com/v0/b/adeem-9a87d.appspot.com/o/5018e1f1-a954-4aad-a65e-80f666312516.png?alt=media&token=69423685-e812-4b62-aec3-77b2ea90de3a';
+    'https://firebasestorage.googleapis.com/v0/b/adeem-9a87d.appspot.com/o/white-logo.png?alt=media&token=5fb4e70d-3e3c-4ba1-b198-72448d9b1a47';
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;

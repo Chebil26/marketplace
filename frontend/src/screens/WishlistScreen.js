@@ -42,6 +42,8 @@ const WishlistScreen = () => {
   const [isbn, setIsbn] = useState('');
   const [publishedYear, setPublishedYear] = useState('');
 
+  const [showWishlists, setShowWishlists] = useState(false);
+
   useEffect(() => {
     dispatch(fetchWishlists());
 
@@ -81,111 +83,131 @@ const WishlistScreen = () => {
     console.log(data.value);
   }
 
+  const handleShowWishlists = () => {
+    setShowWishlists((prevState) => !prevState);
+  };
+
   return (
     <div>
-      <Typography variant='h2'>My Book Wishlist</Typography>
+      <Box>
+        <Typography variant='h3'>Create Wishlist</Typography>
+        <SelectBook sendDataToParent={handleDataFromChild} />
+        <form>
+          <TextField
+            type='text'
+            name='name'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            label='Name'
+            variant='outlined'
+            placeholder='Name'
+          />
+          <TextField
+            type='text'
+            name='defaultImage'
+            value={defaultImage}
+            onChange={(e) => setDefaultImage(e.target.value)}
+            label='Default Image URL'
+            variant='outlined'
+            placeholder='Default Image URL'
+          />
+          <TextField
+            type='text'
+            name='publisher'
+            value={publisher}
+            onChange={(e) => setPublisher(e.target.value)}
+            label='Publisher'
+            variant='outlined'
+            placeholder='Publisher'
+          />
+          <TextField
+            type='text'
+            name='category'
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            label='Category'
+            variant='outlined'
+            placeholder='Category'
+          />
+          <TextField
+            name='description'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            label='Description'
+            variant='outlined'
+            multiline
+            rows={4}
+            placeholder='Description'
+          />
+          <TextField
+            type='text'
+            name='author'
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            label='Author'
+            variant='outlined'
+            placeholder='Author'
+          />
+          <TextField
+            type='text'
+            name='isbn'
+            value={isbn}
+            onChange={(e) => setIsbn(e.target.value)}
+            label='ISBN'
+            variant='outlined'
+            placeholder='ISBN'
+          />
+          <TextField
+            type='text'
+            name='publishedYear'
+            value={publishedYear}
+            onChange={(e) => setPublishedYear(e.target.value)}
+            label='Published Year'
+            variant='outlined'
+            placeholder='Published Year'
+          />
 
-      <Typography variant='h3'>All Wishlists</Typography>
-      <Box sx={{ marginTop: '1rem' }}>
-        {wishlists.map((wishlist) => (
-          <Card sx={{ marginTop: '1rem' }} key={wishlist._id}>
-            <CardContent>
-              <Typography variant='h5'>{wishlist.name}</Typography>
-              <Typography variant='subtitle1'>
-                Author: {wishlist.author}
-              </Typography>
-              <Typography variant='subtitle1'>
-                Created At: {new Date(wishlist.createdAt).toLocaleDateString()}
-              </Typography>
-              {/* Add other wishlist fields as required */}
-            </CardContent>
-          </Card>
-        ))}
+          {/* Add other input fields for wishlist data */}
+        </form>
+
+        <Button variant='contained' onClick={handleCreateWishlist}>
+          Create Wishlist
+        </Button>
       </Box>
 
-      <Typography variant='h3'>Create Wishlist</Typography>
-      <SelectBook sendDataToParent={handleDataFromChild} />
-      <form>
-        <TextField
-          type='text'
-          name='name'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          label='Name'
-          variant='outlined'
-          placeholder='Name'
-        />
-        <TextField
-          type='text'
-          name='defaultImage'
-          value={defaultImage}
-          onChange={(e) => setDefaultImage(e.target.value)}
-          label='Default Image URL'
-          variant='outlined'
-          placeholder='Default Image URL'
-        />
-        <TextField
-          type='text'
-          name='publisher'
-          value={publisher}
-          onChange={(e) => setPublisher(e.target.value)}
-          label='Publisher'
-          variant='outlined'
-          placeholder='Publisher'
-        />
-        <TextField
-          type='text'
-          name='category'
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          label='Category'
-          variant='outlined'
-          placeholder='Category'
-        />
-        <TextField
-          name='description'
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          label='Description'
-          variant='outlined'
-          multiline
-          rows={4}
-          placeholder='Description'
-        />
-        <TextField
-          type='text'
-          name='author'
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          label='Author'
-          variant='outlined'
-          placeholder='Author'
-        />
-        <TextField
-          type='text'
-          name='isbn'
-          value={isbn}
-          onChange={(e) => setIsbn(e.target.value)}
-          label='ISBN'
-          variant='outlined'
-          placeholder='ISBN'
-        />
-        <TextField
-          type='text'
-          name='publishedYear'
-          value={publishedYear}
-          onChange={(e) => setPublishedYear(e.target.value)}
-          label='Published Year'
-          variant='outlined'
-          placeholder='Published Year'
-        />
+      <hr />
 
-        {/* Add other input fields for wishlist data */}
-      </form>
+      <Box>
+        <Button
+          variant='contained'
+          onClick={handleShowWishlists}
+          style={{ marginTop: '1rem' }}>
+          {showWishlists ? 'Cancel' : 'Show All Wishlists'}
+        </Button>
 
-      <Button variant='contained' onClick={handleCreateWishlist}>
-        Create Wishlist
-      </Button>
+        {showWishlists && (
+          <>
+            <Typography variant='h3'>All Wishlists</Typography>
+            <Box sx={{ marginTop: '1rem' }}>
+              {wishlists.map((wishlist) => (
+                <Card sx={{ marginTop: '1rem' }} key={wishlist._id}>
+                  <CardContent>
+                    <Typography variant='h5'>{wishlist.name}</Typography>
+                    <Typography variant='subtitle1'>
+                      Author: {wishlist.author}
+                    </Typography>
+                    <Typography variant='subtitle1'>
+                      Created At:{' '}
+                      {new Date(wishlist.createdAt).toLocaleDateString()}
+                    </Typography>
+                    {/* Add other wishlist fields as required */}
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          </>
+        )}
+      </Box>
     </div>
   );
 };

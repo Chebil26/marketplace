@@ -34,7 +34,7 @@ function StoreDetailScreen() {
 
   useEffect(() => {
     dispatch(listStoreDetails(id));
-    dispatch(getProductsByStore(store.id));
+    dispatch(getProductsByStore(id));
   }, [dispatch]);
 
   // const storeProducts = products.filter(
