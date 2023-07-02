@@ -97,10 +97,8 @@ const ProductScreen = () => {
     }
     console.log(products);
 
-    return () => {
-      // Clear the recommendations state after using it
-      dispatch({ type: 'CLEAR_BOOK_RECOMMENDATIONS' });
-    };
+    // // Clear the recommendations state after using it
+    // dispatch({ type: 'CLEAR_BOOK_RECOMMENDATIONS' });
   }, [dispatch, id, successProductReview, product.name, product.isbn]);
 
   console.log(products);
