@@ -60,17 +60,17 @@ const CarouselHome = () => {
         <ProductCarousel />
       </div> */}
 
-        // <div
-        //   style={{
-        //     display: 'flex', // Use flexbox for horizontal layout
-        //     justifyContent: 'center', // Add space between the cards
-        //   }}>
-        //   {/* <h2 style={{ textAlign: 'center' }}>New Arrivals</h2> */}
+        <div
+          style={{
+            display: 'flex', // Use flexbox for horizontal layout
+            justifyContent: 'center', // Add space between the cards
+          }}>
+          {/* <h2 style={{ textAlign: 'center' }}>New Arrivals</h2> */}
 
-        //   {products.map((product, index) => (
-        //     <ProductPanel key={index} {...product} />
-        //   ))}
-        // </div>
+          // {products.map((product, index) => (
+          //   <ProductPanel key={index} {...product} />
+          // ))}
+        </div>
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
           <Link
