@@ -16,27 +16,7 @@ const CarouselHome = () => {
         'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546910265l/2.jpg',
       price: 1100,
     },
-    {
-      name: 'The Fellowship of the Ring',
-      author: 'J.R.R. Tolkien',
-      image:
-        'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486871542l/3263607._SY475_.jpg',
-      price: 800,
-    },
-    {
-      name: 'The Fellowship of the Ring',
-      author: 'J.R.R. Tolkien',
-      image:
-        'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486871542l/3263607._SY475_.jpg',
-      price: 800,
-    },
-    {
-      name: 'The Fellowship of the Ring',
-      author: 'J.R.R. Tolkien',
-      image:
-        'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486871542l/3263607._SY475_.jpg',
-      price: 800,
-    },
+
     // { name: 'Book 3', author: 'Author 3', image: 'book3.jpg', price: 9.99 },
     // { name: 'Book 4', author: 'Author 4', image: 'book4.jpg', price: 14.99 },
   ];
@@ -67,9 +47,9 @@ const CarouselHome = () => {
           }}>
           {/* <h2 style={{ textAlign: 'center' }}>New Arrivals</h2> */}
 
-          // {products.map((product, index) => (
-          //   <ProductPanel key={index} {...product} />
-          // ))}
+          {products.map((product, index) => (
+            <ProductPanel key={index} {...product} />
+          ))}
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
